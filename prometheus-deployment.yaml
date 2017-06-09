@@ -27,7 +27,6 @@ spec:
       containers:
       - name: prometheus
         image: prom/prometheus:v1.7.0
-        imagePullPolicy: IfNotPresent
         args:
         - -config.file=/etc/prometheus/prometheus.yml
         - -storage.local.path=/prometheus
