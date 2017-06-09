@@ -25,15 +25,13 @@ spec:
         prometheus.io/port: "9090"
     spec:
       containers:
-      - args:
+      - name: prometheus
+        image: prom/prometheus:v1.7.0
+        imagePullPolicy: IfNotPresent
+        args:
         - -config.file=/etc/prometheus/prometheus.yml
         - -storage.local.path=/prometheus
         - -storage.local.retention=24h
-        command:
-        - /bin/prometheus
-        image: quay.io/prometheus/prometheus:v1.1.3
-        imagePullPolicy: IfNotPresent
-        name: prometheus
         ports:
         - containerPort: 9090
           protocol: TCP
