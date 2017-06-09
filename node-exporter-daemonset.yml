@@ -33,8 +33,12 @@ spec:
             - containerPort: 9100
               protocol: TCP
           resources:
+            limits:
+              cpu: 100m
+              memory: 100Mi
             requests:
-              cpu: 0.15
+              cpu: 10m
+              memory: 100Mi
           volumeMounts:
             - name: dev
               mountPath: /host/dev
