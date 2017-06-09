@@ -157,6 +157,13 @@ configuration and the targets. Click Status->Targets and you should
 see the Kubernetes cluster and nodes.  You should also see that
 Prometheus discovered itself under `kubernetes-pods`
 
+#### Using Prometheus without Grafana ####
+
+Alerts and graphs uses the same kind of queries so Prometheus should be usable without Grafana:
+
+Do `kubectl create -f testing/` to expose Prometheus locally. Sample graphs (depending on `minikube service --namespace=monitoring expose-prometheus` URL):
+ * http://192.168.99.101:30090/graph?g0.range_input=1h&g0.expr=container_memory_usage_bytes%7Bcontainer_name%3D~%22%5Eprometheus%22%7D&g0.tab=0
+
 ### Deploying Grafana ###
 
 You can deploy [grafana](http://grafana.org/) by creating its deployment and service by
