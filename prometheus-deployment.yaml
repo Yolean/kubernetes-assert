@@ -31,13 +31,14 @@ spec:
         - -config.file=/etc/prometheus/prometheus.yml
         - -storage.local.path=/prometheus
         - -storage.local.retention=24h
+        - -storage.local.target-heap-size=2GiB
         ports:
         - containerPort: 9090
           protocol: TCP
         resources:
           limits:
             cpu: 500m
-            memory: 2500Mi
+            memory: 3000Mi
           requests:
             cpu: 100m
             memory: 100Mi
