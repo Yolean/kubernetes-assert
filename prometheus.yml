@@ -2,14 +2,14 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   labels:
-    name: prometheus
+    app: prometheus
   name: prometheus
   namespace: monitoring
 spec:
   replicas: 1
   selector:
     matchLabels:
-      name: prometheus
+      app: prometheus
   strategy:
     rollingUpdate:
       maxSurge: 1
@@ -19,7 +19,7 @@ spec:
     metadata:
       creationTimestamp: null
       labels:
-        name: prometheus
+        app: prometheus
       annotations:
         prometheus.io/scrape: "true"
         prometheus.io/port: "9090"

@@ -2,14 +2,14 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   labels:
-    name: grafana
+    app: grafana
   name: grafana
   namespace: monitoring
 spec:
   replicas: 1
   selector:
     matchLabels:
-      name: grafana
+      app: grafana
   strategy:
     rollingUpdate:
       maxSurge: 1
@@ -19,7 +19,7 @@ spec:
     metadata:
       creationTimestamp: null
       labels:
-        name: grafana
+        app: grafana
     spec:
       containers:
       - name: grafana
