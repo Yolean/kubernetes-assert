@@ -1,0 +1,27 @@
+apiVersion: apps/v1beta1 # for versions before 1.6.0 use extensions/v1beta1
+kind: Deployment
+metadata:
+  name: alertmanager
+  namespace: monitoring
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: alertmanager
+    spec:
+      containers:
+      - name: alertmanager
+        image: prom/alertmanager:v0.7.1
+        ports:
+        - containerPort: 9093
+        volumeMounts:
+        - mountPath: /etc/alertmanager
+          name: alertmanager
+    volumes:
+    - name: alertmanager
+      configMap:
+        name: alertmanager-config
+        items:
+          - key: config.yml
+            path: config.yml
