@@ -1,11 +1,12 @@
-apiVersion: extensions/v1beta1
-kind: Deployment
+apiVersion: apps/v1beta1
+kind: StatefulSet
 metadata:
   labels:
     app: prometheus
   name: prometheus
   namespace: monitoring
 spec:
+  serviceName: "prometheus"
   replicas: 1
   selector:
     matchLabels:
