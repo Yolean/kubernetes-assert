@@ -47,4 +47,4 @@ data:
       slack_configs:
       - send_resolved: true
         channel: "#alerts"
-        api_url: $SLACK_ALERTS_WEBHOOK_URL
+        api_url: [ insert slack WebHook API URL ]
