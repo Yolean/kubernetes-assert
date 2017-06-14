@@ -1,0 +1,24 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: prometheus-rules
+  namespace: monitoring
+  annotations:
+    prometheus.io/rules: "true"
+data:
+  toomanyfoos.txt: |-
+    ALERT TooManyFoosToFast
+    IF sum(rate(fooCounter[1m])) > 1
+    FOR 1m
+    LABELS { severity = "warning" }
+    ANNOTATIONS {
+      description = "Rate of foo very high ({{ $value }})."
+    }
+  waytoomanyfoos.txt: |-
+    ALERT WayToManyFoosToFast
+    IF sum(rate(fooCounter[1m])) > 5
+    FOR 1m
+    LABELS { severity = "critical" }
+    ANNOTATIONS {
+      description = "Rate of foo critically high ({{ $value }})."
+    }
