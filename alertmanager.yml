@@ -15,13 +15,19 @@ spec:
         image: prom/alertmanager:v0.7.1
         ports:
         - containerPort: 9093
+        env:
+          - name: SLACK_ALERTS_WEBHOOK_URL
+            valueFrom:
+              secretKeyRef:
+                name: slack-secret
+                key: slack_alerts_webhook_url
         volumeMounts:
         - mountPath: /etc/alertmanager
           name: alertmanager
-    volumes:
-    - name: alertmanager
-      configMap:
-        name: alertmanager-config
-        items:
-          - key: config.yml
-            path: config.yml
+      volumes:
+      - name: alertmanager
+        configMap:
+          name: alertmanager-config
+          items:
+            - key: config.yml
+              path: config.yml
