@@ -39,17 +39,17 @@ spec:
             cpu: 100m
             memory: 100Mi
         volumeMounts:
-        - mountPath: /prometheus
-          name: data
-        - mountPath: /etc/prometheus
-          name: config-volume
+        - name: data
+          mountPath: /prometheus
+        - name: config-volume
+          mountPath: /etc/prometheus
       restartPolicy: Always
       securityContext: {}
       terminationGracePeriodSeconds: 30
       volumes:
-      - configMap:
+      - name: config-volume
+        configMap:
           name: prometheus-config
-        name: config-volume
   volumeClaimTemplates:
   - metadata:
       name: data
