@@ -6,19 +6,19 @@ metadata:
   annotations:
     prometheus.io/rules: "true"
 data:
-  toomanyfoos.txt: |-
-    ALERT TooManyFoosToFast
-    IF sum(rate(fooCounter[1m])) > 1
+  ContainerScrapeError.txt: |-
+    ALERT ContainerScrapeError
+    IF container_scrape_error > 0
     FOR 1m
     LABELS { severity = "warning" }
     ANNOTATIONS {
-      description = "Rate of foo very high ({{ $value }})."
+      description = "Container Scrape Error ({{ $value }})."
     }
-  waytoomanyfoos.txt: |-
-    ALERT WayToManyFoosToFast
-    IF sum(rate(fooCounter[1m])) > 5
+  DeploymentRetries.txt: |-
+    ALERT TooManyDeploymentRetries
+    IF deployment_retries > 3
     FOR 1m
     LABELS { severity = "critical" }
     ANNOTATIONS {
-      description = "Rate of foo critically high ({{ $value }})."
+      description = "Deployment retries: ({{ $value }})."
     }
