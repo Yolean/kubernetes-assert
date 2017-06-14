@@ -28,6 +28,7 @@ spec:
         - -storage.local.path=/prometheus
         - -storage.local.retention=24h
         - -storage.local.target-heap-size=2147483648
+        - -alertmanager.url=http://alertmanager:9093
         ports:
         - containerPort: 9090
           protocol: TCP
