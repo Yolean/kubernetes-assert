@@ -28,6 +28,7 @@ spec:
         - -storage.local.path=/prometheus
         - -storage.local.retention=24h
         - -storage.local.target-heap-size=2147483648
+        - -alertmanager.url=http://alertmanager:9093
         ports:
         - containerPort: 9090
           protocol: TCP
@@ -39,17 +40,22 @@ spec:
             cpu: 100m
             memory: 100Mi
         volumeMounts:
-        - mountPath: /prometheus
-          name: data
-        - mountPath: /etc/prometheus
-          name: config-volume
+        - name: data
+          mountPath: /prometheus
+        - name: config-volume
+          mountPath: /etc/prometheus
+        - name: rules
+          mountPath: /etc/prometheus-rules
       restartPolicy: Always
       securityContext: {}
       terminationGracePeriodSeconds: 30
       volumes:
-      - configMap:
+      - name: config-volume
+        configMap:
           name: prometheus-config
-        name: config-volume
+      - name: rules
+        configMap:
+          name: prometheus-rules
   volumeClaimTemplates:
   - metadata:
       name: data
