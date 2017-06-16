@@ -27,7 +27,7 @@ spec:
       - name: prometheus
         image: prom/prometheus:v1.7.0
         args:
-        - -config.file=/etc/prometheus/prometheus.yml
+        - -config.file=/etc/monitoring/prometheus.yml
         - -storage.local.path=/prometheus
         - -storage.local.retention=24h
         - -storage.local.target-heap-size=2147483648
@@ -45,17 +45,12 @@ spec:
         volumeMounts:
         - name: data
           mountPath: /prometheus
-        - name: config-volume
-          mountPath: /etc/prometheus
-        - name: rules
-          mountPath: /etc/prometheus-rules
+        - name: monitoring-config
+          mountPath: /etc/monitoring
       volumes:
-      - name: config-volume
+      - name: monitoring-config
         configMap:
-          name: prometheus-config
-      - name: rules
-        configMap:
-          name: prometheus-rules
+          name: monitoring-config
   volumeClaimTemplates:
   - metadata:
       name: data
