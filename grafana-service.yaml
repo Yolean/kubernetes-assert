@@ -5,7 +5,8 @@ metadata:
   namespace: monitoring
 spec:
   ports:
-  - port: 3000
+  - name: http
+    port: 80
     protocol: TCP
     targetPort: 3000
   selector:
