@@ -16,12 +16,12 @@ spec:
         ports:
         - containerPort: 9093
         volumeMounts:
-        - mountPath: /etc/alertmanager
-          name: alertmanager
+        - name: alertmanager
+          mountPath: /etc/alertmanager
       volumes:
       - name: alertmanager
         configMap:
-          name: alertmanager-config
+          name: monitoring-config
           items:
-            - key: config.yml
+            - key: alertmanager.yml
               path: config.yml
