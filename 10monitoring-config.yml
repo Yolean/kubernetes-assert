@@ -249,6 +249,7 @@ data:
         action: replace
         target_label: kubernetes_pod_name
 
+  # These are just dummy rules, with the purpose of triggering an alert quite soon
   ContainerScrapeError.alert: |-
     ALERT ContainerScrapeError
     IF container_scrape_error > 0
