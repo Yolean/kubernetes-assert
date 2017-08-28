@@ -61,7 +61,7 @@ everything into the default namespace.
 
 
 First, create the monitoring namespace: `kubectl create -f
-monitoring-namespace.yaml`.
+00-monitoring-namespace.yml`.
 
 You can now list the namespaces by running `kubectl get namespaces`
 and you should see something similar to:
@@ -89,7 +89,7 @@ This allows us to update the configuration separate from the image.
 Note: there is a large debate about whether this is a "good" approach
 or not, but for demo purposes this is fine.
 
-Look at [prometheus-config.yaml](./prometheus-config.yaml). The
+Look at [10-monitoring-config.yaml](./10-monitoring-config.yml). The
 relevant part is in `data/prometheus.yml`.  This is just a [Prometheus
 configuration](https://prometheus.io/docs/operating/configuration/)
 inlined into the Kubernetes manifest. Note that we are using the
@@ -98,20 +98,20 @@ in-cluster
 to access the Kubernetes API.
 
 To deploy this to the cluster run `kubectl create -f
-prometheus-config.yaml`.  You can view this by running `kubectl get
-configmap --namespace=monitoring prometheus-config -o yaml`. You can
+10-monitoring-config.yml`.  You can view this by running `kubectl get
+configmap --namespace=monitoring monitoring-config -o yaml`. You can
 also see this in the Kubernetes Dashboard.
 
 
 ### Prometheus Pod ###
 We will use a single Prometheus
 [pod](http://kubernetes.io/docs/user-guide/pods/) for this demo.  Take
-a look at [prometheus-deployment.yaml](./prometheus-deployment.yaml).
-This is a [Kubernetes Deployment](http://kubernetes.io/docs/user-guide/deployments/) that describes the image to use for
+a look at [20-prometheus-statefulset.yml](./20-prometheus-statefulset.yml).
+This is a [Kubernetes StatefulSet](https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/) that describes the image to use for
 the pod, resources, etc.  Note:
 
 * In the metadata section, we give the pod a label with a key of
-`name` and a value of `prometheus`. This will come in handy later.
+`app` and a value of `prometheus`. This will come in handy later.
 * In annotations, we set a couple of key/value pairs that will
 actually allow Prometheus to autodiscover and scrape itself.
 * We are using an
@@ -122,8 +122,8 @@ actually allow Prometheus to autodiscover and scrape itself.
   cases.
 
 Deploy the deployment by running `kubectl create -f
-prometheus-deployment.yaml`.  You can see this by running `kubectl get
-deployments --namespace=monitoring`.
+20-prometheus-statefulset.yml`.  You can see this by running `kubectl
+get statefulset prometheus --namespace=monitoring -o yaml`.
 
 ### Prometheus Service ###
 
@@ -131,18 +131,18 @@ Now that we have Prometheus deployed, we actually want to get to the
 UI.  To do this, we will expose it using a
 [Kubernetes Service](http://kubernetes.io/docs/user-guide/services/).
 
-In [prometheus-service.yaml](./prometheus-service.yaml), there are a
+In [21-prometheus-service.yml](./21-prometheus-service.yml), there are a
 few things to note:
 
 * The label selector searches for pods that have been labeled with
-`name: prometheus` as we labeled our pod in the deployment.
+`app: prometheus` as we labeled our pod in the deployment.
 * We are exposing port 9090 of the running pods.
 * We are using a "NodePort."  This means that Kubernetes will open a
 port on each node in our cluster. You can query the API to get this
 port.
 
 Create the service by running `kubectl create -f
-prometheus-service.yaml`.  You can then view it by running `kubectl
+21-prometheus-service.yml`.  You can then view it by running `kubectl
 get services --namespace=monitoring prometheus -o yaml`.
 
 One thing to note is that you will see something like `nodePort:
@@ -153,7 +153,7 @@ will open a browser window accessing the service.
 
 From the Prometheus console, you can explore the metrics is it
 collecting and do some basic graphing.  You can also view the
-configuration and the targets. Click Status->Targets and you should
+configuration and the targets. Click _Status -> Targets_ and you should
 see the Kubernetes cluster and nodes.  You should also see that
 Prometheus discovered itself under `kubernetes-pods`
 
@@ -167,8 +167,8 @@ Do `kubectl create -f testing/` to expose Prometheus locally. Sample graphs (dep
 ### Deploying Grafana ###
 
 You can deploy [grafana](http://grafana.org/) by creating its deployment and service by
-running `kubectl create -f grafana-deployment.yaml` and `kubectl
-create -f grafana-service.yaml`. Feel free to explore via the kubectl
+running `kubectl create -f 30-grafana-deployment.yml` and `kubectl
+create -f 31-grafana-service.yaml`. Feel free to explore via the kubectl
 command line and/or the Dashboard.
 
 Go to  grafana by running `minikube service --namespace=monitoring
@@ -183,9 +183,9 @@ source".
 * Select "Prometheus" as the type
 * For the URL, we will actual use [Kubernetes DNS service
   discovery](http://kubernetes.io/docs/user-guide/services/#dns). So,
-  just enter `http://prometheus:9090`. This means that grafana will
+  just enter `http://prometheus:80`. This means that grafana will
   lookup the `prometheus` service running in the same namespace as it
-  on port 9090.
+  on port 80.
 
 Create a New dashboard by clicking on the upper-left icon and
 selecting Dashboard->New.  Click the green control and add a graph
@@ -203,14 +203,14 @@ will use a
 [Kubernetes DaemonSet](http://kubernetes.io/docs/admin/daemons/) to do
 this.
 
-In [node-exporter-daemonset.yml](./node-exporter-daemonset.yml) you
+In [40-node-exporter-daemonset.yml](./40-node-exporter-daemonset.yml) you
 will see that it looks similar to the deployment we did earlier.
 Notice that we run this in privileged mode (`privileged: true`) as it
 needs access to various information about the node to perform
 monitoring.  Also notice that we are mounting in a few node directories
 to monitor various things.
 
-Run `kubectl create -f node-exporter-daemonset.yml` to create the
+Run `kubectl create -f 40-node-exporter-daemonset.yml` to create the
 daemon set.  This will run an instance of this on every node. In
 minikube, there is only one node, but this concept scales to thousands
 of nodes.
