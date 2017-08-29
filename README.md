@@ -131,13 +131,15 @@ Now that we have Prometheus deployed, we actually want to get to the
 UI.  To do this, we will expose it using a
 [Kubernetes Service](http://kubernetes.io/docs/user-guide/services/).
 
+When deploying to minikube use service configuration from `minikube/` directory.
+It is adjusted for mininikube service deployment.
 In [21-prometheus-service.yml](./21-prometheus-service.yml), there are a
 few things to note:
 
 * The label selector searches for pods that have been labeled with
 `app: prometheus` as we labeled our pod in the deployment.
 * We are exposing port 9090 of the running pods.
-* We are using a "NodePort."  This means that Kubernetes will open a
+* Minikube: We are using a `type: NodePort`.  This means that Kubernetes will open a
 port on each node in our cluster. You can query the API to get this
 port.
 
@@ -168,8 +170,9 @@ Do `kubectl create -f testing/` to expose Prometheus locally. Sample graphs (dep
 
 You can deploy [grafana](http://grafana.org/) by creating its deployment and service by
 running `kubectl create -f 30-grafana-deployment.yml` and `kubectl
-create -f 31-grafana-service.yaml`. Feel free to explore via the kubectl
-command line and/or the Dashboard.
+create -f 31-grafana-service.yml` (`kubectl apply -f
+minikube/31-grafana-service.yml` for minikube setup).
+Feel free to explore via the kubectl command line and/or the Dashboard.
 
 Go to  grafana by running `minikube service --namespace=monitoring
 grafana`.  Username is `admin` and password is also `admin`.

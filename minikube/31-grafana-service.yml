@@ -1,13 +1,14 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: prometheus
+  name: grafana
   namespace: monitoring
 spec:
   ports:
   - name: http
     port: 80
     protocol: TCP
-    targetPort: 9090
+    targetPort: 3000
   selector:
-    app: prometheus
+    app: grafana
+  type: NodePort 
