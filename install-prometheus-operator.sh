@@ -52,8 +52,9 @@ cat manifests/prometheus-service-monitor/prometheus-k8s.yaml \
 diff -u manifests/prometheus-service-monitor/prometheus-k8s.yaml manifests/prometheus/prometheus-k8s.yaml
 
 # Create config manually instead
-kubectl create namespace monitoring
-kubectl -n monitoring create secret generic prometheus-k8s --from-file ../../../../config/prometheus.yaml
+# (has no effect here, see generate-prometheus-config.sh)
+#kubectl create namespace monitoring
+#kubectl -n monitoring create secret generic prometheus-k8s --from-file ../config/prometheus.yaml
 
 ### End customizations ###
 

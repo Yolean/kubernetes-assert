@@ -1,0 +1,23 @@
+#!/bin/bash
+set -e
+set -x
+
+if [ -z "${NAMESPACE}" ]; then
+    NAMESPACE=monitoring
+fi
+
+kctl() {
+    kubectl --namespace "$NAMESPACE" "$@"
+}
+
+SECRET=prometheus-k8s
+
+kctl create secret generic $SECRET --from-file config/prometheus.yaml --dry-run
+
+# Before you've created a custom secret, operator will re-create the empty one immediately upon delete
+kctl scale --replicas=0 deploy/prometheus-operator
+sleep 1
+kctl delete secret $SECRET
+sleep 1
+kctl create secret generic $SECRET --from-file config/prometheus.yaml
+kctl scale --replicas=1 deploy/prometheus-operator
