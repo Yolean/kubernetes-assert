@@ -36,7 +36,7 @@ mkdir manifests/prometheus-service-monitor
 mv -v manifests/prometheus/prometheus-k8s-service-monitor-* manifests/prometheus-service-monitor/
 mv -v manifests/prometheus/prometheus-k8s.yaml manifests/prometheus-service-monitor/
 cat manifests/prometheus-service-monitor/prometheus-k8s.yaml \
-  | grep -v 'matchExpressions:' | grep -v '- {key: k8s-app, operator: Exists}' \
+  | grep -v 'matchExpressions:' | grep -v '{key: k8s-app, operator: Exists}' \
   > manifests/prometheus/prometheus-k8s.yaml
 diff -u manifests/prometheus-service-monitor/prometheus-k8s.yaml manifests/prometheus/prometheus-k8s.yaml
 
