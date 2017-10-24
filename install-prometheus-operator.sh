@@ -31,6 +31,19 @@ set -x
 cd $SOURCE_DIR
 cd $OPERATOR_KUBE_DIR
 
+# ServiceMonitor support disabled in favor of Prometheus' built in k8s service discovery
+mkdir manifests/prometheus-service-monitor
+mv -v manifests/prometheus/prometheus-k8s-service-monitor-* manifests/prometheus-service-monitor/
+mv -v manifests/prometheus/prometheus-k8s.yaml manifests/prometheus-service-monitor/
+cat manifests/prometheus-service-monitor/prometheus-k8s.yaml \
+  | grep -v 'matchExpressions:' | grep -v '- {key: k8s-app, operator: Exists}' \
+  > manifests/prometheus/prometheus-k8s.yaml
+diff -u manifests/prometheus-service-monitor/prometheus-k8s.yaml manifests/prometheus/prometheus-k8s.yaml
+
+# Create config manually instead
+kubectl create namespace monitoring
+kubectl -n monitoring create secret generic prometheus-k8s --from-file ../../../../config/prometheus.yaml
+
 EOF
 cat $SOURCE_DIR/$OPERATOR_KUBE_DIR/$OPERATOR_DEPLOY >> deploy.sh
 
