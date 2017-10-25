@@ -1,6 +1,7 @@
 #!/bin/bash
 set -e
 set -x
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 if [ -z "${NAMESPACE}" ]; then
     NAMESPACE=monitoring
@@ -10,9 +11,9 @@ kctl() {
     kubectl --namespace "$NAMESPACE" "$@"
 }
 
-SECRET=prometheus-k8s
+SECRET=prometheus-custom
 
-kctl create secret generic $SECRET --from-file config/prometheus.yaml --dry-run
+kctl create secret generic $SECRET --from-file $DIR/config/prometheus.yaml --dry-run
 
 # Before you've created a custom secret, operator will re-create the empty one immediately upon delete
 kctl scale --replicas=0 deploy/prometheus-operator
