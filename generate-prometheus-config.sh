@@ -21,3 +21,6 @@ kctl delete secret $SECRET
 sleep 1
 kctl create secret generic $SECRET --from-file config/prometheus.yaml
 kctl scale --replicas=1 deploy/prometheus-operator
+# we've lost the auto-restart feature of the operator
+kctl scale --replicas=0 statefulset prometheus-k8s
+kctl scale --replicas=2 statefulset prometheus-k8s
