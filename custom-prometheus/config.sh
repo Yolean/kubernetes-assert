@@ -13,5 +13,5 @@ kctl() {
 
 SECRET=prometheus-custom
 
-kctl delete secret $SECRET
-kctl create secret generic $SECRET --from-file $DIR/config/prometheus.yaml --dry-run
+kctl create secret generic $SECRET --from-file $DIR/config/prometheus.yaml --dry-run -o=yaml \
+  | kubectl replace secret $SECRET -f -
