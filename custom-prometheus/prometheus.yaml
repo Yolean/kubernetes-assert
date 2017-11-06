@@ -7,6 +7,7 @@ metadata:
     prometheus: custom
 spec:
   replicas: 1
+  version: v2.0.0-rc.3
   serviceAccountName: prometheus
   serviceMonitorSelector:
   alerting:
