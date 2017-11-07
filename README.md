@@ -9,6 +9,13 @@ and the manifests in its [contrib]()https://github.com/coreos/prometheus-operato
 
 See [PR #4](https://github.com/Yolean/kubernetes-monitoring/pull/4) for the transition.
 
+## Storage classes
+
+Per cluster, for example
+```
+kubectl -n monitoring apply -f storageclasses-gke/
+```
+
 ## kube-prometheus
 
 Sets up the operator, and the example `k8s` promehteus instance

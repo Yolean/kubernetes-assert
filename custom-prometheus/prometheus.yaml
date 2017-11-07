@@ -18,3 +18,11 @@ spec:
   resources:
     requests:
       memory: 400Mi
+  storage:
+    volumeClaimTemplate:
+      metadata:
+        name: prometheus
+      spec:
+        resources:
+          requests:
+            storage: 10Gi
