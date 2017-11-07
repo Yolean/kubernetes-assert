@@ -33,6 +33,17 @@ ln -s $KUBE_DIR $SOURCE_DIR/$OPERATOR_KUBE_DIR
 cd $KUBE_DIR
 sed -i 's|v2.0.0-rc.1|v2.0.0-rc.3|' manifests/prometheus/prometheus-k8s.yaml
 
+cat <<EOF >> manifests/prometheus/prometheus-k8s.yaml
+  storage:
+    volumeClaimTemplate:
+      metadata:
+        name: prometheus
+      spec:
+        resources:
+          requests:
+            storage: 10Gi
+EOF
+
 echo "Variants:"
 diff -u hack/cluster-monitoring/minikube-deploy hack/cluster-monitoring/self-hosted-deploy
 
