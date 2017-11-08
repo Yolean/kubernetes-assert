@@ -11,4 +11,4 @@ groups:
     labels:
       severity: critical
     annotations:
-      summary: "*{{ $value }}%* of *{{ $labels.deployment }}[{{ $labels.namespace }}]* available"
+      summary: "{{ $value }}% of {{ $labels.deployment }}[{{ $labels.namespace }}] available"
