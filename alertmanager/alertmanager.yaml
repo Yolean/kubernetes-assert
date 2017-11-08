@@ -15,7 +15,11 @@ receivers:
 - name: 'default-receiver'
   slack_configs:
   - channel: '#alerts'
-    title: '[{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] Prometehus Event Notification'
+    title: >-
+        [{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}]
+        {{ range .Alerts }}
+        {{ .Annotations.summary }}
+        {{ end }}
     text: >-
         {{ range .Alerts }}
            *Alert:* {{ .Annotations.summary }} - `{{ .Labels.severity }}`
