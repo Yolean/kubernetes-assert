@@ -14,6 +14,3 @@ kctl() {
 SECRET=prometheus-custom
 
 $DIR/k8s-rules-generate.sh | kctl replace -f -
-
-# assuming port-forward
-curl -v -X POST http://localhost:9090/-/reload
