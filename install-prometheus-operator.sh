@@ -31,7 +31,7 @@ ln -s $KUBE_DIR $SOURCE_DIR/$OPERATOR_KUBE_DIR
 # now customize the included deploy script
 
 cd $KUBE_DIR
-sed -i 's|v2.0.0-rc.1|v2.0.0-rc.3|' manifests/prometheus/prometheus-k8s.yaml
+sed -i 's|v2.0.0-rc.1|v2.0.0|' manifests/prometheus/prometheus-k8s.yaml
 
 cat <<EOF >> manifests/prometheus/prometheus-k8s.yaml
   storage:
