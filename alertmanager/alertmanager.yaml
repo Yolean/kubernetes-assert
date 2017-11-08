@@ -2,7 +2,7 @@ global:
   resolve_timeout: 5m
   slack_api_url: ''
 route:
-  group_by: ['alertname', 'cluster', 'service']
+  group_by: ['alertname', 'cluster', 'service', 'deployment', 'namespace']
   group_wait: 30s
   group_interval: 5m
   repeat_interval: 1h
