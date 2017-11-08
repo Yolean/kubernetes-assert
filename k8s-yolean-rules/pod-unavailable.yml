@@ -1,0 +1,10 @@
+groups:
+- name: ./yolean.availability.rules
+  rules:
+  - alert: AvailabilityCheckFailed
+    expr: kube_deployment_status_replicas_available / kube_deployment_spec_replicas < 1
+    for: 0 # TODO 1m or 30s is maybe more reasonable
+    labels:
+      severity: critical
+    annotations:
+      summary: Pod is down!
