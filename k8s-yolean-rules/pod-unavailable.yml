@@ -2,9 +2,13 @@ groups:
 - name: ./yolean.availability.rules
   rules:
   - alert: AvailabilityCheckFailed
-    expr: kube_deployment_status_replicas_available / kube_deployment_spec_replicas < 1
-    for: 5s
+    expr: "(kube_deployment_status_replicas_available / kube_deployment_spec_replicas) * 100 < 100"
+    # NOTE This seems to be optional, thus missing should equal 0 ?
+    # for: 5s
+    # NOTE:
+    # Both labels and annotations support templates:
+    # https://prometheus.io/docs/alerting/rules/#templating
     labels:
       severity: critical
     annotations:
-      summary: Pod is down!
+      summary: "*{{ $value }}%* of *{{ $labels.deployment }}[{{ $labels.namespace }}]* available"
