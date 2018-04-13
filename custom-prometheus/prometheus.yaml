@@ -7,17 +7,21 @@ metadata:
     prometheus: custom
 spec:
   replicas: 1
-  version: v2.0.0
+  version: v2.2.1
   serviceAccountName: prometheus-custom
   serviceMonitorSelector:
   alerting:
     alertmanagers:
-    - namespace: default
-      name: alertmanager
+    - name: alertmanager-main
+      namespace: monitoring
       port: web
   resources:
     requests:
       memory: 400Mi
+  ruleSelector:
+    matchLabels:
+      prometheus: custom
+      role: alert-rules
   storage:
     volumeClaimTemplate:
       metadata:
