@@ -40,7 +40,7 @@ cat <<EOF >> manifests/prometheus/prometheus-k8s.yaml
       spec:
         resources:
           requests:
-            storage: 10Gi
+            storage: 100Gi
 EOF
 
 echo "Variants:"
