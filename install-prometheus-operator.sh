@@ -46,4 +46,7 @@ EOF
 echo "Variants:"
 diff -u hack/cluster-monitoring/minikube-deploy hack/cluster-monitoring/self-hosted-deploy
 
+# https://github.com/coreos/prometheus-operator/blob/7b946a07df8a94ad31f9624483f9129090507a5c/contrib/kube-prometheus/docs/GKE-cadvisor-support.md
+sed -i -e 's/https/http/g' manifests/prometheus/prometheus-k8s-service-monitor-kubelet.yaml
+
 bash -x $OPERATOR_DEPLOY
