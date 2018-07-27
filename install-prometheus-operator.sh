@@ -7,7 +7,7 @@ KUBE_DIR=$(pwd)/kube-prometheus
 [ -e $KUBE_DIR ] && echo "$KUBE_DIR already exists. Was going to move the contrib folder there." && exit 1
 
 OPERATOR_REPO=coreos/prometheus-operator
-OPERATOR_VERSION=v0.18.1
+OPERATOR_VERSION=v0.22.2
 OPERATOR_KUBE_DIR=contrib/kube-prometheus
 OPERATOR_DEPLOY=hack/cluster-monitoring/deploy
 
