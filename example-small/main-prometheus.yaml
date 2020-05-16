@@ -1,0 +1,20 @@
+apiVersion: monitoring.coreos.com/v1
+kind: Prometheus
+metadata:
+  name: main
+spec:
+  replicas: 1
+  alerting:
+    alertmanagers:
+    - namespace: monitoring
+      name: alertmanager-main
+      port: web
+  serviceMonitorSelector:
+    matchLabels:
+      prometheus: main
+  podMonitorSelector:
+    matchLabels:
+      prometheus: main
+  ruleSelector:
+    matchLabels:
+      prometheus: main

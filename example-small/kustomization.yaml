@@ -1,0 +1,11 @@
+namespace: monitoring
+resources:
+- main-alertmanager-service.yaml
+- main-alertmanager.yaml
+- main-prometheus.yaml
+generatorOptions:
+  disableNameSuffixHash: true
+secretGenerator:
+- name: alertmanager-main
+  files:
+  - alertmanager.yaml
