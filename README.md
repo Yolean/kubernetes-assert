@@ -9,6 +9,14 @@ and the manifests in its [contrib]()https://github.com/coreos/prometheus-operato
 
 See [PR #4](https://github.com/Yolean/kubernetes-monitoring/pull/4) for the transition.
 
+## Newer resources
+
+https://github.com/kubernetes-monitoring/kubernetes-mixin/releases/tag/v0.1.0
+https://github.com/coreos/prometheus-operator/pull/2497
+https://github.com/making/prometheus-kustomize
+https://github.com/kubernetes/enhancements/blob/master/keps/sig-instrumentation/0031-kubernetes-metrics-overhaul.md
+
+
 ## Storage classes
 
 Per cluster, for example
