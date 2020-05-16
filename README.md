@@ -21,6 +21,13 @@ https://github.com/prometheus/node_exporter/releases
 docker-compose -f docker-compose.test.yml up --build kubernetes-mixin
 ```
 
+```
+kubectl apply -k example-small
+```
+
+TODO
+ * RBAC (see prometheus logs)
+
 ## Storage classes
 
 Per cluster, for example

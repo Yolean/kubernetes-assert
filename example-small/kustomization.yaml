@@ -1,4 +1,9 @@
 namespace: monitoring
+commonLabels:
+  # set up prometheus' resource matching for kubernetes-mixin etc.
+  prometheus: main
+bases:
+- ../kubernetes-mixin
 resources:
 - main-alertmanager-service.yaml
 - main-alertmanager.yaml
