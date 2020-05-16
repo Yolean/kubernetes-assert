@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - args:
-        - --web.listen-address=127.0.0.1:9100
+        - --web.listen-address=0.0.0.0:9100
         - --path.procfs=/host/proc
         - --path.sysfs=/host/sys
         - --path.rootfs=/host/root
@@ -25,6 +25,9 @@ spec:
         - --collector.filesystem.ignored-mount-points=^/(dev|proc|sys|var/lib/docker/.+|var/lib/kubelet/pods/.+)($|/)
         image: prom/node-exporter:v1.0.0-rc.1@sha256:790ea2bce2774fa8ff9a7cfaf21792f297d840fb760b54f049bbcfb02ee1e79c
         name: node-exporter
+        ports:
+        - name: web
+          containerPort: 9100
         resources:
           limits:
             cpu: 250m

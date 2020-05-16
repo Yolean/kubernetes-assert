@@ -1,0 +1,14 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: node-exporter
+  labels:
+    prometheus: main
+spec:
+  namespaceSelector:
+    any: false
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: node-exporter
+  podMetricsEndpoints:
+  - port: web
