@@ -26,7 +26,9 @@ kubectl apply -k example-small
 ```
 
 TODO
+ * Prometheus finds no alertmanager endpoints
  * Grafana dashboards configmap is too large for apply
+   - can we set `revisionHistoryLimit` = 0?
 
 ## Storage classes
 
