@@ -15,7 +15,11 @@ https://github.com/kubernetes-monitoring/kubernetes-mixin/releases/tag/v0.1.0
 https://github.com/coreos/prometheus-operator/pull/2497
 https://github.com/making/prometheus-kustomize
 https://github.com/kubernetes/enhancements/blob/master/keps/sig-instrumentation/0031-kubernetes-metrics-overhaul.md
+https://github.com/prometheus/node_exporter/releases
 
+```
+docker-compose -f docker-compose.test.yml up --build kubernetes-mixin
+```
 
 ## Storage classes
 
