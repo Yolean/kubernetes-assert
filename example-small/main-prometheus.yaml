@@ -4,6 +4,7 @@ metadata:
   name: main
 spec:
   replicas: 1
+  serviceAccountName: prometheus
   alerting:
     alertmanagers:
     - namespace: monitoring

@@ -26,7 +26,7 @@ kubectl apply -k example-small
 ```
 
 TODO
- * RBAC (see prometheus logs)
+ * Grafana dashboards configmap is too large for apply
 
 ## Storage classes
 

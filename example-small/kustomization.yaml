@@ -3,6 +3,7 @@ commonLabels:
   # set up prometheus' resource matching for kubernetes-mixin etc.
   prometheus: main
 bases:
+- ../rbac-prometheus
 - ../kubernetes-mixin
 resources:
 - main-alertmanager-service.yaml
