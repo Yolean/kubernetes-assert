@@ -5,14 +5,11 @@ services:
     build: ./kubernetes-mixin
     environment:
     - DEBUG=true
-    - CHOWN=${CHOWN-1000:1000}
     entrypoint:
     - sh
     - -ce
     command:
     - |
-      chown -R $$CHOWN dashboards_out
-      chown -R $$CHOWN *.yaml 
       cp -rv dashboards_out /distribution
       cp prometheus_rules.yaml /distribution/prometheus_rules.yaml
       cp prometheus_alerts.yaml /distribution/prometheus_alerts.yaml
