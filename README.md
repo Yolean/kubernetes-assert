@@ -15,10 +15,6 @@ kubectl apply -k example-small
 Note how [Prometheus](./example-small/main-prometheus.yaml) will match rules and monitors
 using the label(s) that the [kustomization.yaml](./example-small/kustomization.yaml) adds.
 
-TODO
- * Grafana dashboards configmap is too large for apply
-   - can we set `revisionHistoryLimit` = 0?
-
 ## Re-generate stuff
 
 This repo needs to have some generated content, where upstream kustomize bases could not be found
