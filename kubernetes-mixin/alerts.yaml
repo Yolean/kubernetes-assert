@@ -541,7 +541,7 @@ spec:
         "message": "KubeControllerManager has disappeared from Prometheus target discovery."
         "runbook_url": "https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/runbook.md#alert-name-kubecontrollermanagerdown"
       "expr": |
-        absent(up{job="kube-controller-manager"} == 1)
+        absent(up{job="TODO-or-IGNORE"} == 1)
       "for": "15m"
       "labels":
         "severity": "critical"

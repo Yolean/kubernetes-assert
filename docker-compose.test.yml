@@ -29,6 +29,7 @@ services:
       cat prometheus_alerts.yaml | sed 's|^|  |' >> /kustomize-base/alerts.yaml
 
       cp -rv dashboards_out/* /dashboards-kustomize-base
+      rm /dashboards-kustomize-base/controller-manager.json
       cat << EOF > /dashboards-kustomize-base/kustomization.yaml
       # It should be possible to extend this set of dashboards using the "replace" behavior
       # Meant to be used with kubectl create -k and kubectl replace -k
