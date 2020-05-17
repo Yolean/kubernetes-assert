@@ -1,7 +1,6 @@
 namespace: monitoring
 bases:
 - ../rbac-prometheus
-- ../prometheus-adapter
 - ../base-label-prometheus-main
 # Needs separate kubectl replace -k
 #- ../kubernetes-mixin-dashboards
