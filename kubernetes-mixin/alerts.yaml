@@ -389,16 +389,16 @@ spec:
         "runbook_url": "https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/runbook.md#alert-name-kubeapilatencyhigh"
       "expr": |
         (
-          cluster:apiserver_request_duration_seconds:mean5m{job="kube-apiserver"}
+          cluster:apiserver_request_duration_seconds:mean5m{job="apiserver"}
           >
           on (verb) group_left()
           (
-            avg by (verb) (cluster:apiserver_request_duration_seconds:mean5m{job="kube-apiserver"} >= 0)
+            avg by (verb) (cluster:apiserver_request_duration_seconds:mean5m{job="apiserver"} >= 0)
             +
-            2*stddev by (verb) (cluster:apiserver_request_duration_seconds:mean5m{job="kube-apiserver"} >= 0)
+            2*stddev by (verb) (cluster:apiserver_request_duration_seconds:mean5m{job="apiserver"} >= 0)
           )
         ) > on (verb) group_left()
-        1.2 * avg by (verb) (cluster:apiserver_request_duration_seconds:mean5m{job="kube-apiserver"} >= 0)
+        1.2 * avg by (verb) (cluster:apiserver_request_duration_seconds:mean5m{job="apiserver"} >= 0)
         and on (verb,resource)
         cluster_quantile:apiserver_request_duration_seconds:histogram_quantile{job="kube-apiserver",quantile="0.99"}
         >
@@ -413,7 +413,7 @@ spec:
       "expr": |
         sum(rate(apiserver_request_total{job="kube-apiserver",code=~"5.."}[5m])) by (resource,subresource,verb)
           /
-        sum(rate(apiserver_request_total{job="kube-apiserver"}[5m])) by (resource,subresource,verb) > 0.05
+        sum(rate(apiserver_request_total{job="apiserver"}[5m])) by (resource,subresource,verb) > 0.05
       "for": "10m"
       "labels":
         "severity": "warning"
@@ -422,7 +422,7 @@ spec:
         "message": "A client certificate used to authenticate to the apiserver is expiring in less than 7.0 days."
         "runbook_url": "https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/runbook.md#alert-name-kubeclientcertificateexpiration"
       "expr": |
-        apiserver_client_certificate_expiration_seconds_count{job="kube-apiserver"} > 0 and on(job) histogram_quantile(0.01, sum by (job, le) (rate(apiserver_client_certificate_expiration_seconds_bucket{job="kube-apiserver"}[5m]))) < 604800
+        apiserver_client_certificate_expiration_seconds_count{job="apiserver"} > 0 and on(job) histogram_quantile(0.01, sum by (job, le) (rate(apiserver_client_certificate_expiration_seconds_bucket{job="kube-apiserver"}[5m]))) < 604800
       "labels":
         "severity": "warning"
     - "alert": "KubeClientCertificateExpiration"
@@ -430,7 +430,7 @@ spec:
         "message": "A client certificate used to authenticate to the apiserver is expiring in less than 24.0 hours."
         "runbook_url": "https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/runbook.md#alert-name-kubeclientcertificateexpiration"
       "expr": |
-        apiserver_client_certificate_expiration_seconds_count{job="kube-apiserver"} > 0 and on(job) histogram_quantile(0.01, sum by (job, le) (rate(apiserver_client_certificate_expiration_seconds_bucket{job="kube-apiserver"}[5m]))) < 86400
+        apiserver_client_certificate_expiration_seconds_count{job="apiserver"} > 0 and on(job) histogram_quantile(0.01, sum by (job, le) (rate(apiserver_client_certificate_expiration_seconds_bucket{job="kube-apiserver"}[5m]))) < 86400
       "labels":
         "severity": "critical"
     - "alert": "AggregatedAPIErrors"
@@ -455,7 +455,7 @@ spec:
         "message": "KubeAPI has disappeared from Prometheus target discovery."
         "runbook_url": "https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/runbook.md#alert-name-kubeapidown"
       "expr": |
-        absent(up{job="kube-apiserver"} == 1)
+        absent(up{job="apiserver"} == 1)
       "for": "15m"
       "labels":
         "severity": "critical"

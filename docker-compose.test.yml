@@ -26,7 +26,9 @@ services:
         name: kubernetes-mixin-alerts
       spec:
       EOF
-      cat prometheus_alerts.yaml | sed 's|^|  |' >> /kustomize-base/alerts.yaml
+      cat prometheus_alerts.yaml | sed 's|^|  |' \
+        | sed 's|{job="kube-apiserver"}|{job="apiserver"}|' \
+        >> /kustomize-base/alerts.yaml
 
       cp -rv dashboards_out/* /dashboards-kustomize-base
       cat << EOF > /dashboards-kustomize-base/kustomization.yaml

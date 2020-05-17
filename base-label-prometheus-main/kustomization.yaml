@@ -3,6 +3,7 @@
 commonLabels:
   prometheus: main
 bases:
+- ../k8s
 - ../node-exporter
 - ../kube-state-metrics
 - ../kubernetes-mixin
