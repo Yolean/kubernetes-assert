@@ -1,0 +1,5 @@
+
+configMapGenerator:
+- name: adapter-config
+  files:
+  - config.yaml
