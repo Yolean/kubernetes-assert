@@ -23,6 +23,12 @@ spec:
         - --no-collector.wifi
         - --no-collector.hwmon
         - --collector.filesystem.ignored-mount-points=^/(dev|proc|sys|var/lib/docker/.+|var/lib/kubelet/pods/.+)($|/)
+        env:
+        # is there any way to get node name into metrics' labels ("instance" is only the IP)?
+        - name: NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
         image: prom/node-exporter:v1.0.0-rc.1@sha256:790ea2bce2774fa8ff9a7cfaf21792f297d840fb760b54f049bbcfb02ee1e79c
         name: node-exporter
         ports:
