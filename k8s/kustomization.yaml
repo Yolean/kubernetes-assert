@@ -1,7 +1,8 @@
 resources:
 - prometheus-serviceMonitorApiserver.yaml
+- prometheus-serviceMonitorKubeScheduler.yaml
 - prometheus-serviceMonitorCoreDNS.yaml
-#- prometheus-serviceMonitorKubeControllerManager.yaml
 - prometheus-serviceMonitorKubelet.yaml
-#- prometheus-serviceMonitorKubeScheduler.yaml
 #- prometheus-serviceMonitor.yaml
+# Do we need this service?
+#- prometheus-serviceMonitorKubeControllerManager.yaml
