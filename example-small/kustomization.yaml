@@ -5,6 +5,8 @@ commonLabels:
 bases:
 - ../rbac-prometheus
 - ../kubernetes-mixin
+- ../node-exporter
+- ../kube-state-metrics
 resources:
 - main-alertmanager-service.yaml
 - main-alertmanager.yaml

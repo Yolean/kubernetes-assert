@@ -2,8 +2,6 @@ apiVersion: monitoring.coreos.com/v1
 kind: PodMonitor
 metadata:
   name: kube-state-metrics
-  labels:
-    prometheus: main
 spec:
   namespaceSelector:
     any: false
