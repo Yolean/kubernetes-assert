@@ -10,3 +10,6 @@ spec:
       app.kubernetes.io/name: kube-state-metrics
   podMetricsEndpoints:
   - port: web
+    relabelings:
+    - action: labeldrop
+      regex: (pod|service|endpoint|namespace)
