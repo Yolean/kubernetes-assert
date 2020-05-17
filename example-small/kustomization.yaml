@@ -1,12 +1,7 @@
 namespace: monitoring
-commonLabels:
-  # set up prometheus' resource matching for kubernetes-mixin etc.
-  prometheus: main
 bases:
 - ../rbac-prometheus
-- ../kubernetes-mixin
-- ../node-exporter
-- ../kube-state-metrics
+- ../base-label-prometheus-main
 resources:
 - main-alertmanager-service.yaml
 - main-alertmanager.yaml

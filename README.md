@@ -16,7 +16,6 @@ Note how [Prometheus](./example-small/main-prometheus.yaml) will match rules and
 using the label(s) that the [kustomization.yaml](./example-small/kustomization.yaml) adds.
 
 TODO
- * Prometheus finds no alertmanager endpoints
  * Grafana dashboards configmap is too large for apply
    - can we set `revisionHistoryLimit` = 0?
 
