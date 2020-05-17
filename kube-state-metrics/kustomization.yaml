@@ -1,0 +1,5 @@
+resources:
+- kube-state-metrics-serviceAccount.yaml
+- kube-state-metrics-clusterRole.yaml
+- kube-state-metrics-clusterRoleBinding.yaml
+- kube-state-metrics-deployment.yaml
