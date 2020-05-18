@@ -17,7 +17,7 @@ services:
         name: kubernetes-mixin-rules
       spec:
       EOF
-      cat prometheus_rules.yaml | sed 's|^|  |' >> /kustomize-base/rules.yaml
+      cat prometheus_rules.yaml | gojsontoyaml | sed 's|^|  |' >> /kustomize-base/rules.yaml
 
       cat << EOF > /kustomize-base/alerts.yaml
       apiVersion: monitoring.coreos.com/v1
@@ -26,7 +26,7 @@ services:
         name: kubernetes-mixin-alerts
       spec:
       EOF
-      cat prometheus_alerts.yaml | sed 's|^|  |' >> /kustomize-base/alerts.yaml
+      cat prometheus_alerts.yaml | gojsontoyaml | sed 's|^|  |' >> /kustomize-base/alerts.yaml
 
       cp -rv dashboards_out/* /dashboards-kustomize-base
       rm /dashboards-kustomize-base/controller-manager.json
