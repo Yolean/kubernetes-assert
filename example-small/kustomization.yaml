@@ -1,0 +1,16 @@
+namespace: monitoring
+bases:
+- ../rbac-prometheus
+- ../base-label-prometheus-main
+# Needs separate kubectl replace -k
+#- ../kubernetes-mixin-dashboards
+resources:
+- main-alertmanager-service.yaml
+- main-alertmanager.yaml
+- main-prometheus.yaml
+generatorOptions:
+  disableNameSuffixHash: true
+secretGenerator:
+- name: alertmanager-main
+  files:
+  - alertmanager.yaml

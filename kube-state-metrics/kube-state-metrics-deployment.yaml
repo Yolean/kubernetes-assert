@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: kube-state-metrics
+  name: kube-state-metrics
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: kube-state-metrics
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: kube-state-metrics
+    spec:
+      containers:
+      - args:
+        - --host=0.0.0.0
+        - --port=8081
+        - --telemetry-host=0.0.0.0
+        - --telemetry-port=8082
+        image: quay.io/coreos/kube-state-metrics:v1.9.6@sha256:7baf75cfa9f70966f2d1f9e724edfb8970fd0ce817fc59887f650cf83b92a14d
+        name: kube-state-metrics
+        ports:
+        - name: web
+          containerPort: 8081
+        - name: self
+          containerPort: 8082
+        securityContext:
+          runAsUser: 65534
+      nodeSelector:
+        kubernetes.io/os: linux
+      serviceAccountName: kube-state-metrics

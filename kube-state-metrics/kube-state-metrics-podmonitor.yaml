@@ -1,0 +1,16 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: kube-state-metrics
+spec:
+  jobLabel: app.kubernetes.io/name
+  namespaceSelector:
+    any: false
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: kube-state-metrics
+  podMetricsEndpoints:
+  - port: web
+    relabelings:
+    - action: labeldrop
+      regex: (pod|service|endpoint|namespace)
