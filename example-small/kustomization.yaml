@@ -7,6 +7,7 @@ bases:
 resources:
 - main-alertmanager-service.yaml
 - main-alertmanager.yaml
+- main-prometheus-service.yaml
 - main-prometheus.yaml
 generatorOptions:
   disableNameSuffixHash: true
