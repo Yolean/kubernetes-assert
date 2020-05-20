@@ -1,0 +1,4 @@
+namespace: monitoring
+bases:
+# While this is WIP we have a branch https://github.com/Yolean/grafana-manifests/tree/example-mod
+- github.com/Yolean/grafana-manifests/example?ref=fd42490613a580c0b0b96ee780c7b89ae47fdb7f
