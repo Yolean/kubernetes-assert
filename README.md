@@ -44,9 +44,8 @@ docker volume rm kubernetes-monitoring_admin 2> /dev/null || true
 
 ```
 compose='docker-compose -f docker-compose.test.yml -f docker-compose.dev-overrides.yml'
-$compose down
-docker volume rm kubernetes-monitoring_admin 2>/dev/null || true
-docker volume rm kubernetes-monitoring_k3s-server 2>/dev/null || true
+$compose down \
+  ;docker volume rm kubernetes-monitoring_admin kubernetes-monitoring_k3s-server 2>/dev/null || true
 $compose up -d agent
 export KUBECONFIG=$PWD/test/.kube/kubeconfig.yaml
 ```

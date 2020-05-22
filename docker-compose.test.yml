@@ -5,10 +5,13 @@ services:
     image: rancher/k3s:v1.17.5-k3s1@sha256:3025ecfa3c7c3a262a97435cb7c9c182d22b93d014bac767019d65bdce586786
     command:
     - server
+    - --https-listen-port=17443
     - --disable-agent
     - --node-name=server
     - --no-deploy=traefik
     - --no-deploy=servicelb
+    - --kube-apiserver-arg
+    -   service-node-port-range=31770-31779
     tmpfs:
     - /run
     - /var/run
@@ -18,7 +21,7 @@ services:
     - K3S_KUBECONFIG_OUTPUT=/admin/.kube/kubeconfig.yaml
     - K3S_KUBECONFIG_MODE=666
     expose:
-    - 6443
+    - 17443
     - 8472
     - 10250
     volumes:
@@ -36,7 +39,7 @@ services:
     - /var/run
     privileged: true
     environment:
-    - K3S_URL=https://server:6443
+    - K3S_URL=https://server:17443
     - K3S_TOKEN=somethingtotallyrandom
     expose:
     - 8472
@@ -59,7 +62,6 @@ services:
     - -cx
     command:
     - |
-      tail -f /dev/null
       mkdir ~/.kube
       until test -f /admin/.kube/kubeconfig.yaml; do
         [ $$KUBECONFIG_WAIT -gt 0 ] || exit ${BULID_EXIT_CODE_ON_NO_CLUSTER:-0}

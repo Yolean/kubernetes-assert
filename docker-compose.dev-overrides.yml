@@ -3,13 +3,14 @@ services:
 
   server:
     ports:
-    - 6443:6443
+    - 17443:17443
 
   agent:
     ports:
     # Failed to get traefik to work in docker-compose, add predefined node ports here instead
     #- 80:80
     #- 443:443
+    - "31770-31779:31770-31779"
     mem_limit: 8589934592
     memswap_limit: 0
 
