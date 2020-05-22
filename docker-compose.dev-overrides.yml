@@ -15,3 +15,11 @@ services:
   sut:
     environment:
     - KEEP_RUNNING=true
+
+volumes:
+  admin:
+    driver: local
+    driver_opts:
+      type: none
+      device: $PWD/test
+      o: bind

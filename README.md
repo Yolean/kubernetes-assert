@@ -43,6 +43,8 @@ kubectl -n monitoring apply -f storageclasses-gke/
 
 ```
 compose='docker-compose -f docker-compose.test.yml -f docker-compose.dev-overrides.yml'
-$compose up -d
-kubie ctx -f ./admin/.kube/kubeconfig.yaml
+$compose down
+docker volume rm kubernetes-monitoring_admin 2> /dev/null || true
+$compose up -d node
+kubie ctx -f ./test/.kube/kubeconfig.yaml
 ```
