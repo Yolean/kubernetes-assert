@@ -5,10 +5,10 @@ services:
     ports:
     - 6443:6443
 
-  node:
+  agent:
     ports:
-    - 80:30080
-    - 443:30443
+    - 80:80
+    - 443:443
     mem_limit: 8589934592
     memswap_limit: 0
 
