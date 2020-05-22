@@ -7,6 +7,8 @@ services:
     - server
     - --disable-agent
     - --node-name=server
+    - --no-deploy=traefik
+    - --no-deploy=servicelb
     tmpfs:
     - /run
     - /var/run
