@@ -1,57 +1,68 @@
 version: '2.4'
 services:
 
-  kubernetes-mixin:
-    build: ./kubernetes-mixin
-    environment:
-    - DEBUG=true
-    entrypoint:
-    - sh
-    - -ce
+  server:
+    image: rancher/k3s:v1.17.5-k3s1@sha256:3025ecfa3c7c3a262a97435cb7c9c182d22b93d014bac767019d65bdce586786
     command:
-    - |
-      cat << EOF > /kustomize-base/rules.yaml
-      apiVersion: monitoring.coreos.com/v1
-      kind: PrometheusRule
-      metadata:
-        name: kubernetes-mixin-rules
-      spec:
-      EOF
-      cat prometheus_rules.yaml | gojsontoyaml | sed 's|^|  |' >> /kustomize-base/rules.yaml
-
-      cat << EOF > /kustomize-base/alerts.yaml
-      apiVersion: monitoring.coreos.com/v1
-      kind: PrometheusRule
-      metadata:
-        name: kubernetes-mixin-alerts
-      spec:
-      EOF
-      cat prometheus_alerts.yaml | gojsontoyaml | sed 's|^|  |' >> /kustomize-base/alerts.yaml
-
-      cp -rv dashboards_out/* /dashboards-kustomize-base
-      rm /dashboards-kustomize-base/controller-manager.json
-      cat << EOF > /dashboards-kustomize-base/kustomization.yaml
-      # It should be possible to extend this set of dashboards using the "replace" behavior
-      # Meant to be used with kubectl create -k and kubectl replace -k
-      # (unless we learn how to get rid of last-applied-configuration with apply)
-      generatorOptions:
-        disableNameSuffixHash: true
-      configMapGenerator:
-      - name: kubernetes-mixin-grafana-dashboards
-        files:
-      EOF
-      find /dashboards-kustomize-base -name \*.json | sed 's|.*/\(.*\)|  - \1=\1|' >> /dashboards-kustomize-base/kustomization.yaml
+    - server
+    - --disable-agent
+    - -v=0
+    environment:
+    - K3S_TOKEN=somethingtotallyrandom
+    - K3S_KUBECONFIG_OUTPUT=/admin/.kube/kubeconfig.yaml
+    - K3S_KUBECONFIG_MODE=666
     volumes:
-    - ./kubernetes-mixin:/kustomize-base
-    - ./kubernetes-mixin-dashboards:/dashboards-kustomize-base
+    - k3s-server:/var/lib/rancher/k3s
+    - admin:/admin
+    mem_limit:  300000000
+    memswap_limit: 0
+
+  node:
+    image: rancher/k3s:v1.17.5-k3s1@sha256:3025ecfa3c7c3a262a97435cb7c9c182d22b93d014bac767019d65bdce586786
+    tmpfs:
+    - /run
+    - /var/run
+    privileged: true
+    environment:
+    - K3S_URL=https://server:6443
+    - K3S_TOKEN=somethingtotallyrandom
+    mem_limit: 1500000000
+    memswap_limit: 0
 
   sut:
-    image: golang:1.14.3-buster@sha256:6edcc1af51905a860d510a7d4bb0a83d9a0e381cf05c07f23722020a4c688e6f
-    #environment:
-    #- DEBUG=true
+    depends_on:
+    - server
+    - node
+    image: solsson/ystack-runner@sha256:95aff82cb5245e93c8f3193253b054a5628f6421ddc5f93b5dfff0cf38d1bbc7
+    environment:
+    - PROMETHEUS_OPERATOR_BASE=github.com/coreos/prometheus-operator/?ref=9877ec897fc7ea4f50d947ca824ae0c30c185105
+    - KUBECONFIG_WAIT=30
+    - KEEP_RUNNING=false
+    volumes:
+    - admin:/admin
     entrypoint:
-    - bash
-    - -ce
+    - /bin/bash
+    - -cx
     command:
     - |
-      echo "No tests"
+      mkdir ~/.kube
+      until test -f /admin/.kube/kubeconfig.yaml; do
+        [ $$KUBECONFIG_WAIT -gt 0 ] || exit ${BULID_EXIT_CODE_ON_NO_CLUSTER:-0}
+        KUBECONFIG_WAIT=$$(( $$KUBECONFIG_WAIT - 1 ))
+        echo "Waiting for a kubeconfig ..." && sleep 1
+      done
+      set -e
+      cat /admin/.kube/kubeconfig.yaml | sed 's|127.0.0.1|server|' > ~/.kube/config
+      kubectl-waitretry --for=condition=Ready node --all
+      kubectl get namespace monitoring 2>/dev/null || kubectl create namespace monitoring
+      kubectl apply -k $$PROMETHEUS_OPERATOR_BASE
+      if [ "$$KEEP_RUNNING" = "true" ]; then
+        echo "Will stay running for manual work"
+        sleep infinity
+      fi
+    mem_limit:   80000000
+    memswap_limit: 0
+
+volumes:
+  k3s-server: {}
+  admin: {}

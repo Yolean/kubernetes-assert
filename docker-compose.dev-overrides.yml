@@ -1,0 +1,17 @@
+version: '2.4'
+services:
+
+  server:
+    ports:
+    - 6443:6443
+
+  node:
+    ports:
+    - 80:30080
+    - 443:30443
+    mem_limit: 8589934592
+    memswap_limit: 0
+
+  sut:
+    environment:
+    - KEEP_RUNNING=true

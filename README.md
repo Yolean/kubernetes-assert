@@ -32,3 +32,17 @@ Per cluster, for example
 ```
 kubectl -n monitoring apply -f storageclasses-gke/
 ```
+
+## CI test suite
+
+```
+./test.sh
+```
+
+## Development
+
+```
+compose='docker-compose -f docker-compose.test.yml -f docker-compose.dev-overrides.yml'
+$compose up -d
+kubie ctx -f ./admin/.kube/kubeconfig.yaml
+```
