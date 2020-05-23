@@ -12,7 +12,7 @@ start from the example kustomize base:
 kubectl apply -k example-small
 ```
 
-Note how [Prometheus](./example-small/main-prometheus.yaml) will match rules and monitors
+Note how [Prometheus](./example-small/now-prometheus.yaml) will match rules and monitors
 using the label(s) that the [kustomization.yaml](./example-small/kustomization.yaml) adds.
 
 ## Re-generate stuff

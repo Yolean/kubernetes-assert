@@ -1,9 +1,10 @@
 apiVersion: monitoring.coreos.com/v1
 kind: Prometheus
 metadata:
-  name: main
+  name: now
 spec:
   replicas: 1
+  retention: 2h
   serviceAccountName: prometheus
   alerting:
     alertmanagers:
@@ -12,10 +13,10 @@ spec:
       port: web
   serviceMonitorSelector:
     matchLabels:
-      prometheus: main
+      prometheus: now
   podMonitorSelector:
     matchLabels:
-      prometheus: main
+      prometheus: now
   ruleSelector:
     matchLabels:
-      prometheus: main
+      prometheus: now
