@@ -6,6 +6,11 @@ spec:
   replicas: 1
   retention: 2h
   serviceAccountName: prometheus
+  image: prom/prometheus:v2.18.1@sha256:5880ec936055fad18ccee798d2a63f64ed85bd28e8e0af17c6923a090b686c3d
+  securityContext:
+    runAsUser: 65534
+    runAsGroup: 65534
+    fsGroup: 65534
   alerting:
     alertmanagers:
     - namespace: monitoring
