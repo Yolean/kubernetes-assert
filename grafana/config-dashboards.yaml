@@ -1,0 +1,16 @@
+apiVersion: 1
+providers:
+- name: 'opensource'
+  folder: ''
+  type: file
+  disableDeletion: false
+  editable: true
+  options:
+    path: /dashboards/opensource/repo
+- name: 'kubernets-mixin'
+  folder: ''
+  type: file
+  disableDeletion: false
+  editable: true
+  options:
+    path: /dashboards/kubernetes-mixin
