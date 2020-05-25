@@ -1,10 +1,4 @@
-FROM yolean/node@sha256:a0141027783eb712197efe3ac1b42726da0da1c72ecafed99991ddf511086427 as unittest
-
-# https://github.com/Yolean/docker-base/commit/5df42e26c7720527979f6ad83f1281424645fd3f
-RUN grep 'nonroot:x:65532' /etc/passwd || \
-  echo 'nonroot:x:65532:65534:nonroot:/home/nonroot:/usr/sbin/nologin' >> /etc/passwd && \
-  mkdir -p /home/nonroot && touch /home/nonroot/.bash_history && chown -R 65532:65534 /home/nonroot
-USER nonroot:nogroup
+FROM yolean/node:55fc6cce124e31a053b9eb57a3d0e9212a98bee0@sha256:870d8cb2f70fa6ab73b53e115bc4ed471534c4ce96ff1083f4475743697d4c55 as unittest
 
 ENV CI=true
 
@@ -21,13 +15,7 @@ COPY *-reporter.js src ./
 
 RUN npm test
 
-FROM yolean/node@sha256:a0141027783eb712197efe3ac1b42726da0da1c72ecafed99991ddf511086427
-
-# https://github.com/Yolean/docker-base/commit/5df42e26c7720527979f6ad83f1281424645fd3f
-RUN grep 'nonroot:x:65532' /etc/passwd || \
-  echo 'nonroot:x:65532:65534:nonroot:/home/nonroot:/usr/sbin/nologin' >> /etc/passwd && \
-  mkdir -p /home/nonroot && touch /home/nonroot/.bash_history && chown -R 65532:65534 /home/nonroot
-USER nonroot:nogroup
+FROM yolean/node:55fc6cce124e31a053b9eb57a3d0e9212a98bee0@sha256:870d8cb2f70fa6ab73b53e115bc4ed471534c4ce96ff1083f4475743697d4c55
 
 ENV CI=true
 
