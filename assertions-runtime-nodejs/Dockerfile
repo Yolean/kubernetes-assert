@@ -42,4 +42,4 @@ ENTRYPOINT [ "./node_modules/.bin/jest", "--watch" ]
 # We could copy from context but buildkit won't run the unittest stage unless we somehow depend on the result
 COPY --from=unittest *-reporter.js ./
 
-COPY waiting-for-specs src
+COPY --chown=nonroot waiting-for-specs src

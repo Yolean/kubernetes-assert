@@ -15,6 +15,9 @@ build:
         dockerfile:
           path: Dockerfile
     sync:
-      infer: ["**/*"]
+      manual:
+      # intentionally differs from the COPY source, so we test addition of spec files after start
+      - src: 'src/**'
+        dest: .
 deploy:
   kustomize: {}
