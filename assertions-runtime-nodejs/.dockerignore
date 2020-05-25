@@ -1,3 +1,7 @@
 *
+!.gitignore
 !package.json
 !package-lock.json
+!waiting-for-specs
+!*-reporter.js
+!src
