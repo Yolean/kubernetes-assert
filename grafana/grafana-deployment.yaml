@@ -102,7 +102,7 @@ spec:
           name: renderer
           protocol: TCP
       - name: git-sync
-        image: k8s.gcr.io/git-sync:v3.1.6
+        image: k8s.gcr.io/git-sync:v3.1.6@sha256:aa88eb188b3bd4bdd2a4237a4d7be2b8df0cad5be002ad82c13bf47aa2f9bd13
         env:
         - name: GIT_SYNC_REPO
           value: "https://github.com/Yolean/grafana-dashboards"
