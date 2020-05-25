@@ -10,6 +10,8 @@ start from the example kustomize base:
 
 ```
 kubectl apply -k example-small
+kubectl -n monitoring create -k kubernetes-mixin-dashboards
+kubectl apply -k grafana
 ```
 
 Note how [Prometheus](./example-small/now-prometheus.yaml) will match rules and monitors
