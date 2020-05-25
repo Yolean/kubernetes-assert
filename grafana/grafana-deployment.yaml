@@ -50,14 +50,18 @@ spec:
           value: "false"
         - name: GF_LOG_MODE
           value: console
-        # - name: GF_INSTALL_PLUGINS
-        #   value: grafana-piechart-panel,grafana-clock-panel
+        - name: GF_INSTALL_PLUGINS
+          value: grafana-image-renderer,grafana-piechart-panel,grafana-clock-panel
         - name: GF_SERVER_ENABLE_GZIP
           value: "true"
         - name: GF_METRICS_ENABLED
           value: "true"
         - name: GF_EXPLORE_ENABLED
           value: "true"
+        - name: GF_RENDERING_SERVER_URL
+          value: http://127.0.0.1:8081/render
+        - name: GF_RENDERING_CALLBACK_URL
+          value: http://127.0.0.1:3000/
         ports:
         - containerPort: 3000
           name: web
@@ -87,6 +91,16 @@ spec:
           name: dashboards
         - mountPath: /dashboards/kubernetes-mixin
           name: kubernetes-mixin-grafana-dashboards
+      # renderer should be a separate deployment to allow scale out, but so far we're just testing it
+      - name: renderer
+        image: grafana/grafana-image-renderer:2.0.0@sha256:e2aa271b92c3c57b5e327c772d70595299216f9481bf65ca3f2d508bedccab7c
+        env:
+        - name: ENABLE_METRICS
+          value: "true"
+        ports:
+        - containerPort: 8081
+          name: renderer
+          protocol: TCP
       - name: git-sync
         image: k8s.gcr.io/git-sync:v3.1.6
         env:
