@@ -110,8 +110,6 @@ spec:
           value: "repo"
         - name: GIT_SYNC_ROOT
           value: "/dashboards/opensource"
-        - name: GIT_SYNC_MAX_SYNC_FAILURES
-          value: "5"
         - name: GIT_SYNC_WAIT
           value: "2147483647"
         resources:
