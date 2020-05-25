@@ -37,9 +37,9 @@ COPY package*.json .gitignore ./
 
 RUN git init && npm ci --ignore-scripts
 
+ENTRYPOINT [ "./node_modules/.bin/jest", "--watch" ]
+
 # We could copy from context but buildkit won't run the unittest stage unless we somehow depend on the result
 COPY --from=unittest *-reporter.js ./
-
-ENTRYPOINT [ "./node_modules/.bin/jest", "--watch" ]
 
 COPY waiting-for-specs src

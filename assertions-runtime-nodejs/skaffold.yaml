@@ -14,5 +14,7 @@ build:
       dependencies:
         dockerfile:
           path: Dockerfile
+    sync:
+      infer: ["**/*"]
 deploy:
   kustomize: {}
