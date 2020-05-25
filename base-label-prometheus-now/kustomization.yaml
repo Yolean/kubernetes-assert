@@ -1,7 +1,7 @@
 # The resources to be scraped are versioned without the labels that Prometheus Operator matches on
 # so the purpose of this kustomize base is to collect them and set a chosen label
 commonLabels:
-  prometheus: main
+  prometheus: now
 bases:
 - ../k8s
 - ../node-exporter

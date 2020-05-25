@@ -4,7 +4,7 @@
 generatorOptions:
   disableNameSuffixHash: true
 configMapGenerator:
-- name: kubernets-mixin-grafana-dashboards
+- name: kubernetes-mixin-grafana-dashboards
   files:
   - namespace-by-pod.json=namespace-by-pod.json
   - k8s-resources-cluster.json=k8s-resources-cluster.json
@@ -20,7 +20,6 @@ configMapGenerator:
   - k8s-resources-node.json=k8s-resources-node.json
   - k8s-resources-pod.json=k8s-resources-pod.json
   - namespace-by-workload.json=namespace-by-workload.json
-  - controller-manager.json=controller-manager.json
   - pod-total.json=pod-total.json
   - persistentvolumesusage.json=persistentvolumesusage.json
   - k8s-resources-workloads-namespace.json=k8s-resources-workloads-namespace.json

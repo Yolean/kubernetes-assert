@@ -1,0 +1,28 @@
+apiVersion: monitoring.coreos.com/v1
+kind: Prometheus
+metadata:
+  name: now
+spec:
+  replicas: 1
+  retention: 2h
+  serviceAccountName: prometheus
+  image: prom/prometheus:v2.18.1@sha256:5880ec936055fad18ccee798d2a63f64ed85bd28e8e0af17c6923a090b686c3d
+  securityContext:
+    runAsUser: 65534
+    runAsGroup: 65534
+    # Uncomment on failure to start a new instance. Left out because it may have performance implications, as configmaps may be large.
+    #fsGroup: 65534
+  alerting:
+    alertmanagers:
+    - namespace: monitoring
+      name: alertmanager-main
+      port: web
+  serviceMonitorSelector:
+    matchLabels:
+      prometheus: now
+  podMonitorSelector:
+    matchLabels:
+      prometheus: now
+  ruleSelector:
+    matchLabels:
+      prometheus: now

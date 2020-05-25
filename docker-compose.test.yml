@@ -37,10 +37,10 @@ services:
       generatorOptions:
         disableNameSuffixHash: true
       configMapGenerator:
-      - name: kubernets-mixin-grafana-dashboards
+      - name: kubernetes-mixin-grafana-dashboards
         files:
       EOF
-      find dashboards_out -name \*.json | sed 's|dashboards_out/\(.*\)|  - \1=\1|' >> /dashboards-kustomize-base/kustomization.yaml
+      find /dashboards-kustomize-base -name \*.json | sed 's|.*/\(.*\)|  - \1=\1|' >> /dashboards-kustomize-base/kustomization.yaml
     volumes:
     - ./kubernetes-mixin:/kustomize-base
     - ./kubernetes-mixin-dashboards:/dashboards-kustomize-base
