@@ -10,7 +10,8 @@ spec:
   securityContext:
     runAsUser: 65534
     runAsGroup: 65534
-    fsGroup: 65534
+    # Uncomment on failure to start a new instance. Left out because it may have performance implications, as configmaps may be large.
+    #fsGroup: 65534
   alerting:
     alertmanagers:
     - namespace: monitoring
