@@ -112,8 +112,6 @@ spec:
           value: "/dashboards/opensource"
         - name: GIT_SYNC_MAX_SYNC_FAILURES
           value: "5"
-        securityContext:
-          runAsUser: 65533 # git-sync user
         volumeMounts:
         - mountPath: /dashboards
           name: dashboards
