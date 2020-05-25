@@ -43,6 +43,10 @@ class MetricsServer {
     this.server.listen(this.port);
   }
 
+  stop() {
+    this.server.close();
+  }
+
 }
 
 const server = new MetricsServer({
@@ -75,7 +79,11 @@ class MetricsReporter {
   
   onTestResult(test, testResult, aggregatedResult) {
     assertions_failed.inc(testResult.numFailingTests);
-    //console.log('onTestResult', testResult);
+    //console.log('onTestResult', testResult, aggregatedResult);
+    if (!this._globalConfig.watch && !this._globalConfig.watchAll) {
+      //console.log('Not a watch run. Exiting');
+      server.stop();
+    }
   }
 
 }
