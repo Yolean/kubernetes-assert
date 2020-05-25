@@ -112,6 +112,12 @@ spec:
           value: "/dashboards/opensource"
         - name: GIT_SYNC_MAX_SYNC_FAILURES
           value: "5"
+        - name: GIT_SYNC_WAIT
+          value: "2147483647"
+        resources:
+          limits:
+            cpu: 10m
+            memory: 10Mi
         volumeMounts:
         - mountPath: /dashboards
           name: dashboards
