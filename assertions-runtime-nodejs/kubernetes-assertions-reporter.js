@@ -1,3 +1,5 @@
+// TODO a https://jestjs.io/docs/en/watch-plugins might be better suited to the task
+
 console.log('Reporter loaded');
 
 const http = require('http');
@@ -20,9 +22,6 @@ const test_suites_total = new client.Counter({
   help: 'inc\'d for every onRunComplete numTotalTestSuites'
 })
 
-/**
- * TODO can we somehow exit on non-watch jest runs?
- */
 class MetricsServer {
 
   constructor({ port, getMetrics }) {

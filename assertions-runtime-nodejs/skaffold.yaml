@@ -20,4 +20,6 @@ build:
       - src: 'src/**'
         dest: .
 deploy:
-  kustomize: {}
+  kustomize:
+    paths:
+    - dev-ystack
