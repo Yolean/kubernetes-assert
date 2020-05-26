@@ -1,0 +1,20 @@
+apiVersion: skaffold/v2beta4
+kind: Config
+metadata:
+  name: assert-runtime-nodejs-example-project
+build:
+  tagPolicy:
+    gitCommit:
+      variant: CommitSha
+  artifacts:
+  - image: builds-registry.ystack.svc.cluster.local/yolean/kubernetes-assert/example-project
+    context: ./
+    custom:
+      buildCommand: y-build
+      dependencies:
+        dockerfile:
+          path: Dockerfile
+    sync:
+      infer: ["**/*"]
+deploy:
+  kustomize: {}

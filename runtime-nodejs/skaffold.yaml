@@ -9,7 +9,7 @@ build:
     gitCommit:
       variant: CommitSha
   artifacts:
-  - image: builds-registry.ystack.svc.cluster.local/yolean/kubernetes-assert-runtime-nodejs
+  - image: builds-registry.ystack.svc.cluster.local/yolean/kubernetes-assert/runtime-nodejs
     context: ./
     custom:
       buildCommand: y-build
@@ -22,7 +22,7 @@ build:
       - src: 'src/**'
         dest: .
 test:
-- image: builds-registry.ystack.svc.cluster.local/yolean/kubernetes-assert-runtime-nodejs
+- image: builds-registry.ystack.svc.cluster.local/yolean/kubernetes-assert/runtime-nodejs
   structureTests:
   - './structure-test/*'
 deploy:
