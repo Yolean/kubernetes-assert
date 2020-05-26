@@ -28,3 +28,5 @@ ENTRYPOINT [ "/usr/src/runtime/node_modules/.bin/jest", "--projects=/usr/src/run
 COPY --from=unittest /usr/src/runtime/jest.*.js ./
 
 COPY --chown=nonroot:nogroup waiting-for-specs ./src
+
+WORKDIR /usr/src/specs--must-be-set-explicitly-by-downstream-images--for-now

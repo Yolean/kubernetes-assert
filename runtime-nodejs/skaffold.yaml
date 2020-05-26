@@ -20,7 +20,7 @@ build:
       manual:
       # intentionally differs from the COPY source, so we test addition of spec files after start
       - src: 'src/**'
-        dest: .
+        dest: /usr/src/runtime
 test:
 - image: builds-registry.ystack.svc.cluster.local/yolean/kubernetes-assert/runtime-nodejs
   structureTests:
