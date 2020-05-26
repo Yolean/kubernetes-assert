@@ -1,5 +1,5 @@
 {
-  "name": "assertions-runtime-nodejs",
+  "name": "@yolean/assert-runtime-nodejs",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",

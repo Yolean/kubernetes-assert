@@ -1,7 +1,9 @@
+# `skaffold dev` then add or edit specs under ./src
+# `kubectl exec $(kubectl get pods -l sut=runtime -o name) -c runtime -- curl -s http://localhost:9090/metrics`
 apiVersion: skaffold/v2beta4
 kind: Config
 metadata:
-  name: assertions-runtime-nodejs
+  name: assert-runtime-nodejs
 build:
   tagPolicy:
     gitCommit:

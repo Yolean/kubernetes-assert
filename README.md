@@ -3,14 +3,18 @@
 ### WIP status: Search for `?)` in this text to find pending decisions. Search for TODO to find pending work.
 
 Kubernetes Assert is our re-think of [build-contract](https://github.com/Yolean/build-contract), for Kubernetes.
+As usual we don't write tooling. We combine mainstream stuff that we find lean enough.
 
 Summary:
 
-1. If you don't have a monitoring stack already, use the one from this repo. It's the Prometheus setup we use in dev clusters.
-2. Arrange your specs like in [our example](./assertions-runtime-nodejs/example-specs/) with a [skaffold.yaml](./assertions-runtime-nodejs/example-specs/skaffold.yaml) and [kustomization.yaml](./assertions-runtime-nodejs/example-specs/kustomization.yaml).
+1. If you don't have a monitoring stack already, use the one from this repo.
+   It's the Prometheus setup we use in dev clusters.
+2. Arrange your specs like in [our example](./runtime-nodejs/example-specs/) with a [skaffold.yaml](./runtime-nodejs/example-specs/skaffold.yaml) and [kustomization.yaml](./runtime-nodejs/example-specs/kustomization.yaml).
 3. Run `skaffold dev`
 4. Make sure Prometheus will [scrape `assertions_failed`](./assertions_failed/).
-5. Watch for Alerts using for example `kubectl -n monitoring exec alertmanager-main-0 -c alertmanager -- wget -qO- http://127.0.0.1:9093/api/v2/alerts | jq` or the web interface, or a pager.
+5. Watch for Alerts using for example
+   `kubectl -n monitoring exec alertmanager-main-0 -c alertmanager -- wget -qO- http://127.0.0.1:9093/api/v2/alerts | jq`
+   or the web interface, or a pager.
 
 ## What is a test
 
@@ -49,17 +53,19 @@ Our first runtime for Kubernets Assert is based on [Jest](https://jestjs.io/):
 * BDD style
 * Specs don't need to be compiled, we can copy source to the runtime.
 * The test runner will translate Jest results to `assertions_failed`. Specs are free to [export](https://www.npmjs.com/package/prom-client#counter) other metrics of any kind.
+* By design we'll always run in [watch](https://jestjs.io/docs/en/cli#--watchall) mode. If specs are static that's equal to one test run but staying alive to keep exporting metrics.
+   - Success criterias and cleanup is implemented by the pipeline.
 
 How are specs delivered to the runtime?
 
 1. If your specs are a "project", i.e. have a package.json, you need a proper build step. Use the runtime as base image. Install to `/usr/src/specs`(?). See example TODO.
    - Note that Jest `--watch` (i.e. the runtime's `skaffold dev`) requires source to be in a git repo. A `git init` with no commits is fine, but remember to include your `.gitignore`.
-1. If your specs are fine with the [runtime's](./assertions-runtime-nodejs/package.json) `dependencies`
+1. If your specs are fine with the [runtime's](./runtime-nodejs/package.json) `dependencies`
    (feel free to have utility .js files alongside specs) they need to be mounted or copied to `/usr/src/specs/src`(?)
 
 How to avoid boilerplate?
 
-* You still need yaml. But the actual workflow definition can be inherited from the runtime's [Kustomize base](./assertions-runtime-nodejs/base/) `- github.com/Yolean/kubernetes-assert/assertions-runtime-nodejs/kustomize/?ref=[your choice]`.
+* You still need yaml. But the actual workflow definition can be inherited from the runtime's [Kustomize base](./runtime-nodejs/base/) `- github.com/Yolean/kubernetes-assert/runtime-nodejs/kustomize/?ref=[your choice]`.
 * Create your [kustomization.yaml](https://kubectl.docs.kubernetes.io/pages/reference/kustomize.html) then run `skaffold init`. See example TODO.
 
 ## Apply the example monitoring stack
