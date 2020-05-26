@@ -6,11 +6,11 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      kubernetes-assert: metrics
+      kubernetes-assert: counter
   template:
     metadata:
       labels:
-        kubernetes-assert: metrics
+        kubernetes-assert: counter
     spec:
       containers:
       - name: runtime
