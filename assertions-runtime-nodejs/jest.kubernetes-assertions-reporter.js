@@ -39,7 +39,7 @@ class MetricsServer {
     this.server.on('clientError', (err, socket) => {
       socket.end('HTTP/1.1 400 Bad Request\r\n\r\n');
     });
-    this.server.listen(this.port);
+    this.server.listen(this.port, '0.0.0.0');
   }
 
   stop() {

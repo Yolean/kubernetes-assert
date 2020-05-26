@@ -1,0 +1,14 @@
+schemaVersion: 2.0.0
+
+fileExistenceTests:
+- name: 'Runtime package.json'
+  path: '/usr/src/runtime/package.json'
+- name: 'Runtime package locks'
+  path: '/usr/src/runtime/package-lock.json'
+- name: 'Runtime source folder'
+  path: '/usr/src/runtime/src'
+- name: 'Jest config'
+  path: '/usr/src/runtime/jest.config.js'
+- name: 'No actual runtime source because runtime consists of jest extensions and the specs run as unit tests during build'
+  path: '/usr/src/runtime/src/**'
+  shouldExist: false

@@ -4,6 +4,14 @@
 
 Kubernetes Assert is our re-think of [build-contract](https://github.com/Yolean/build-contract), for Kubernetes.
 
+Summary:
+
+1. If you don't have a monitoring stack already, use the one from this repo. It's the Prometheus setup we use in dev clusters.
+2. Arrange your specs like in [our example](./assertions-runtime-nodejs/example-specs/) with a [skaffold.yaml](./assertions-runtime-nodejs/example-specs/skaffold.yaml) and [kustomization.yaml](./assertions-runtime-nodejs/example-specs/kustomization.yaml).
+3. Run `skaffold dev`
+4. Make sure Prometheus will [scrape `assertions_failed`](./assertions_failed/).
+5. Watch for Alerts using for example `kubectl -n monitoring exec alertmanager-main-0 -c alertmanager -- wget -qO- http://127.0.0.1:9093/api/v2/alerts | jq` or the web interface, or a pager.
+
 ## What is a test
 
 The idea is that any container that exports an `assertions_failed` counter (OR gauge?) is a test.
@@ -47,11 +55,11 @@ How are specs delivered to the runtime?
 1. If your specs are a "project", i.e. have a package.json, you need a proper build step. Use the runtime as base image. Install to `/usr/src/specs`(?). See example TODO.
    - Note that Jest `--watch` (i.e. the runtime's `skaffold dev`) requires source to be in a git repo. A `git init` with no commits is fine, but remember to include your `.gitignore`.
 1. If your specs are fine with the [runtime's](./assertions-runtime-nodejs/package.json) `dependencies`
-   (feel free to have utility .js files alongside specs) they need to be mounted or copied to `/usr/src/runtime/src`(?)
+   (feel free to have utility .js files alongside specs) they need to be mounted or copied to `/usr/src/specs/src`(?)
 
 How to avoid boilerplate?
 
-* You still need yaml. But the actual workflow definition can be inherited from the runtime's [Kustomize base](./assertions-runtime-nodejs/base/) `- github.com/Yolean/kubernetes-assert/assertions-runtime-nodejs/base/?ref=[your choice]`.
+* You still need yaml. But the actual workflow definition can be inherited from the runtime's [Kustomize base](./assertions-runtime-nodejs/base/) `- github.com/Yolean/kubernetes-assert/assertions-runtime-nodejs/kustomize/?ref=[your choice]`.
 * Create your [kustomization.yaml](https://kubectl.docs.kubernetes.io/pages/reference/kustomize.html) then run `skaffold init`. See example TODO.
 
 ## Apply the example monitoring stack

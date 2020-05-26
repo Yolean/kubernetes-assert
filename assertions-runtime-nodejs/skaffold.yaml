@@ -19,6 +19,10 @@ build:
       # intentionally differs from the COPY source, so we test addition of spec files after start
       - src: 'src/**'
         dest: .
+test:
+- image: builds-registry.ystack.svc.cluster.local/yolean/kubernetes-assert-runtime-nodejs
+  structureTests:
+  - './structure-test/*'
 deploy:
   kustomize:
     paths:

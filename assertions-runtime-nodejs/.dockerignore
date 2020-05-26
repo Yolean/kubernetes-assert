@@ -2,6 +2,6 @@
 !.gitignore
 !package.json
 !package-lock.json
+!jest.*.js
 !waiting-for-specs
-!*-reporter.js
 !src
