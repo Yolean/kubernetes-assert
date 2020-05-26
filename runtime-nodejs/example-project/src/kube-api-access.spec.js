@@ -1,11 +1,18 @@
+const fs = require('fs');
+const { Certificate } = require('@fidm/x509');
+
+const credspath = '/run/secrets/kubernetes.io/serviceaccount';
+
 describe("kube api access", () => {
 
-  xit("Uses a library in this project's package.json", () => {
-    // TODO
+  it("Uses a library in this project's package.json", () => {
+    expect(Certificate).toBeDefined();
   });
 
-  it("Can locate the pod's mounted credentials", () => {
-    expect(true).toEqual(false);
+  it("Can locate the pod's mounted ca", async () => {
+    const crt = await fs.promises.readFile(`${credspath}/ca.crt`);
+    const ca = Certificate.fromPEM(crt);
+    expect(ca).toHaveProperty('publicKey');
   });
 
 });

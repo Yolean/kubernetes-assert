@@ -1,10 +1,10 @@
 # TODO public build, this is from ../ skaffold dev
-FROM builds-registry.ystack.svc.cluster.local/yolean/kubernetes-assert/runtime-nodejs:3db548aed2ab8ecd32c49d781bec8a76699615f8-dirty
+FROM builds-registry.ystack.svc.cluster.local/yolean/kubernetes-assert/runtime-nodejs:64e9e32e5776eb7082488fc144c967ae11aef802-dirty
 
 WORKDIR /usr/src/specs
 
-COPY package*.json .
+COPY --chown=nonroot:nogroup package*.json .
 
 RUN npm ci --ignore-scripts
 
-COPY . .
+COPY --chown=nonroot:nogroup . .
