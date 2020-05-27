@@ -9,7 +9,8 @@ Summary:
 
 1. If you don't have a monitoring stack already, use the one from this repo.
    It's the Prometheus setup we use in dev clusters.
-2. Arrange your specs like in [our example](./runtime-nodejs/example-specs/) with a [skaffold.yaml](./runtime-nodejs/example-specs/skaffold.yaml) and [kustomization.yaml](./runtime-nodejs/example-specs/kustomization.yaml).
+2. Arrange your specs like in [our example](./runtime-nodejs/example-project/) with a [skaffold.yaml](./runtime-nodejs/example-project/skaffold.yaml) and [kustomization.yaml](./runtime-nodejs/example-project/kustomization.yaml).
+   - Our near term roadmap is to support "just put your spec files here" to run but we're not [there](./runtime-nodejs/example-specs/) yet. You need a [Dockerfile](./runtime-nodejs/example-project/Dockerfile).
 3. Run `skaffold dev`
 4. Make sure Prometheus will [scrape `assertions_failed`](./assertions_failed/).
 5. Watch for Alerts using for example
