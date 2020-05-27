@@ -1,0 +1,11 @@
+schemaVersion: 2.0.0
+
+fileExistenceTests:
+- name: 'Must be a git repo for jest --watch to work'
+  path: '/usr/src/.git'
+
+commandTests:
+- name: "Git log should be empty"
+  command: "git"
+  args: ["log"]
+  exitCode: 128
