@@ -8,4 +8,7 @@ describe("MetricsReporter", () => {
     expect(reporter).toBeDefined();
   });
 
+  it("Needs at least one actual it, to show up in jest's output", () => {
+  });
+
 });
