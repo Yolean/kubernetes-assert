@@ -1,8 +1,7 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 bases:
-#- github.com/Yolean/kubernetes-assert/runtime-nodejs/kustomize?ref=
-- ../kustomize
+- github.com/Yolean/kubernetes-assert/runtime-nodejs/kustomize?ref=f49ff6965c13bf2484f722cd0a39a280f1746ede
 namePrefix: example-project-
 commonLabels:
   app: example-project

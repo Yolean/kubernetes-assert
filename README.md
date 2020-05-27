@@ -120,3 +120,15 @@ sudo rm test/.kube/kubeconfig.yaml
 $compose up -d sut
 export KUBECONFIG=$PWD/test/.kube/kubeconfig.yaml
 ```
+
+## Releases
+
+```
+git push
+# wait for https://hub.docker.com/r/solsson/kubernetes-assert, then
+YOLEAN_PROMOTE=true IMAGE_NAME=solsson/kubernetes-assert:latest ./hooks/build
+# update examples so that people get started from refs
+grep -A 1 bases: runtime-nodejs/example-project/kustomization.yaml
+grep FROM runtime-nodejs/example-project/Dockerfile
+# validate examples
+```
