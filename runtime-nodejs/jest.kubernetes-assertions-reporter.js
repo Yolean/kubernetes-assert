@@ -7,20 +7,35 @@ const http = require('http');
 const client = require('prom-client');
 const register = client.register;
 
-const assertions_failed = new client.Counter({
+const assertions_failed = new client.Gauge({
   name: 'assertions_failed',
+  help: 'current onTestResult numFailingTests',
+});
+
+const assertions_failed_total = new client.Counter({
+  name: 'assertions_failed_total',
   help: 'inc\'d for every onTestResult numFailingTests',
 });
 
-const tests_total = new client.Counter({
-  name: 'tests_total',
-  help: 'inc\'d for every onRunComplete numTotalTests'
-})
+const tests_run = new client.Gauge({
+  name: 'tests_run',
+  help: 'current onRunComplete numTotalTests'
+});
 
-const test_suites_total = new client.Counter({
-  name: 'test_suites_total',
+const tests_run_total = new client.Counter({
+  name: 'tests_run_total',
+  help: 'inc\'d for every onRunComplete numTotalTests'
+});
+
+const test_suites_run = new client.Gauge({
+  name: 'test_suites_run',
+  help: 'current onRunComplete numTotalTestSuites'
+});
+
+const test_suites_run_total = new client.Counter({
+  name: 'test_suites_run_total',
   help: 'inc\'d for every onRunComplete numTotalTestSuites'
-})
+});
 
 class MetricsServer {
 
@@ -72,12 +87,15 @@ class MetricsReporter {
 
   onRunComplete(contexts, results) {
     //console.log('onRunComplete', contexts, results);
-    test_suites_total.inc(results.numTotalTestSuites);
-    tests_total.inc(results.numTotalTests);
+    test_suites_run.set(results.numTotalTestSuites);
+    test_suites_run_total.inc(results.numTotalTestSuites);
+    tests_run.set(results.numTotalTests);
+    tests_run_total.inc(results.numTotalTests);
   }
   
   onTestResult(test, testResult, aggregatedResult) {
-    assertions_failed.inc(testResult.numFailingTests);
+    assertions_failed.set(testResult.numFailingTests);
+    assertions_failed_total.inc(testResult.numFailingTests);
     //console.log('onTestResult', testResult, aggregatedResult);
     if (!this._globalConfig.watch && !this._globalConfig.watchAll) {
       //console.log('Not a watch run. Exiting');
