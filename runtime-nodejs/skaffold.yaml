@@ -18,8 +18,8 @@ build:
           path: Dockerfile
     sync:
       manual:
-      # intentionally differs from the COPY source, so we test addition of spec files after start
-      - src: 'src/**'
+      # at skaffold dev this is the runtime's specs, which is wy it differs from the COPY directive in the Dockerfile
+      - src: 'specs/**'
         dest: /usr/src
 test:
 - image: builds-registry.ystack.svc.cluster.local/yolean/kubernetes-assert/runtime-nodejs

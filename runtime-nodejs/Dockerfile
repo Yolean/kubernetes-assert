@@ -27,6 +27,6 @@ ENTRYPOINT [ "/usr/src/node_modules/.bin/jest", "--projects=/usr/src", "--watchA
 # We could copy from context but buildkit won't run the unittest stage unless we somehow depend on the result
 COPY --from=unittest /usr/src/jest.*.js ./
 
-COPY --chown=nonroot:nogroup waiting-for-specs ./src
+COPY --chown=nonroot:nogroup waiting-for-specs ./specs
 
 WORKDIR /usr/src/specs--must-be-set-explicitly-by-downstream-images--for-now
