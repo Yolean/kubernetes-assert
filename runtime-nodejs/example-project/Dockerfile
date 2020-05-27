@@ -1,5 +1,4 @@
-# TODO public build, this is from ../ skaffold dev
-FROM yolean/assert-runtime-nodejs:f49ff6965c13bf2484f722cd0a39a280f1746ede@sha256:c16f4b42e50c22a8d49806e4883aee17678aca163d259ca0022eacad9570f0cd
+FROM yolean/assert-runtime-nodejs:d3630d89f1babc4a17f95e89a249030b8b501043@sha256:cb4ce7cddce3230420ae963c2ec5718b68254f98a8a00b6a0879d2aa672b9b56
 
 WORKDIR /usr/src/specs
 
