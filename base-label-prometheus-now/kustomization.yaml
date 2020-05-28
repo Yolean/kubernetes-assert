@@ -7,3 +7,4 @@ bases:
 - ../node-exporter
 - ../kube-state-metrics
 - ../kubernetes-mixin
+- ../assertions_failed
