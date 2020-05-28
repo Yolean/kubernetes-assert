@@ -15,4 +15,9 @@ describe("kube api access", () => {
     expect(ca).toHaveProperty('publicKey');
   });
 
+  it("Can read pod's mounted bearer token", async () => {
+    const token = await fs.promises.readFile(`${credspath}/token`, 'utf8');
+    expect(token).toMatch(/.+/);
+  });
+
 });

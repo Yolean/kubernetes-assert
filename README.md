@@ -11,6 +11,7 @@ Summary:
    It's the Prometheus setup we use in dev clusters.
 2. Arrange your specs like in [our example](./runtime-nodejs/example-project/) with a [skaffold.yaml](./runtime-nodejs/example-project/skaffold.yaml) and [kustomization.yaml](./runtime-nodejs/example-project/kustomization.yaml).
    - Our near term roadmap is to support "just put your spec files here" to run but we're not [there](./runtime-nodejs/example-specs/) yet. You need a [Dockerfile](./runtime-nodejs/example-project/Dockerfile).
+   - You need a way to [build](https://skaffold.dev/docs/pipeline-stages/builders/) with Skaffold. Our examples use [y-stack](https://github.com/y-stack/ystack) which is completely local, but any build method is fine.
 3. Run `skaffold dev`
 4. Make sure Prometheus will [scrape `assertions_failed`](./assertions_failed/).
 5. Watch for Alerts using for example
