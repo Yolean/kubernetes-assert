@@ -12,8 +12,10 @@ describe("Kubernets client (nodejs)", () => {
   });
 
   it("Can list pods", async () => {
-    // What's a simple way to use current namespace?
+    // Can the client simply use the context's current namespace instead?
     const namespace = await fs.promises.readFile(`/run/secrets/kubernetes.io/serviceaccount/namespace`, 'utf8');
+    expect(process.env.POD_NAMESPACE).toBeTruthy();
+    expect(namespace).toEqual(process.env.POD_NAMESPACE);
     
     const pods = await k.listNamespacedPod(namespace);
     const names = pods.body.items.map(pod => pod.metadata.name);
