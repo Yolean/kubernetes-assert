@@ -2,7 +2,7 @@ FROM yolean/assert-runtime-nodejs:d3630d89f1babc4a17f95e89a249030b8b501043@sha25
 
 WORKDIR /usr/src/specs
 
-COPY --chown=nonroot:nogroup package*.json .
+COPY --chown=nonroot:nogroup package*.json ./
 
 RUN npm ci --ignore-scripts
 
