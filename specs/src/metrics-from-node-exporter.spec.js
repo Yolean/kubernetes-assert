@@ -10,6 +10,7 @@ describe("node-exporter", () => {
   ].forEach(metric => {
     it(`Has a metric ${metric}`, async () => {
       const meta = await fetch(`${prom}/api/v1/metadata?metric=${metric}`).then(res => res.json());
+      expect(meta.status).toEqual('success');
       expect(meta).toHaveProperty('data');
       expect(meta.data).toHaveProperty(metric);
     });
