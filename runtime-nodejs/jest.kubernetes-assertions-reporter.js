@@ -113,6 +113,8 @@ class MetricsReporter {
       //console.log('Not a watch run. Exiting');
       server.stop();
     }
+    // onRunComplete seems to happen before each onTestResult so this placement isn't great
+    assert_files_seen.set(Object.keys(this._pathsSeen).length);
   }
 
   onTestResult(test, testResult, aggregatedResult) {
@@ -120,7 +122,6 @@ class MetricsReporter {
     const path = testResult.testFilePath;
     if (!this._pathsSeen[path]) {
       this._pathsSeen[path] = {};
-      assert_files_seen.inc(1);
     }
     if (this.isAssertCompletion(path)) {
       this.onAssertCompletion(testResult);
