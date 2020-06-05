@@ -8,4 +8,3 @@ commonLabels:
 images:
 - name: yolean/assert-runtime-nodejs
   newName: builds-registry.ystack.svc.cluster.local/yolean/kubernetes-assert/example-project
-  newTag: null
