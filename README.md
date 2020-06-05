@@ -72,8 +72,7 @@ How to avoid boilerplate?
 
 ## Apply the example monitoring stack
 
-Assuming that `github.com/coreos/prometheus-operator/?ref=[a recent revision]` is already installed,
-start from the example kustomize base:
+Start from the example kustomize base:
 
 ```
 kubectl apply -k example-small

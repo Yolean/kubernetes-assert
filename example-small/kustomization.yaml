@@ -1,5 +1,6 @@
 namespace: monitoring
 bases:
+- ../prometheus-operator
 - ../rbac-prometheus
 - ../base-label-prometheus-now
 # Needs separate kubectl replace -k
