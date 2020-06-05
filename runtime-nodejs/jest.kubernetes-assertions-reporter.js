@@ -37,6 +37,21 @@ const test_suites_run_total = new client.Counter({
   help: 'inc\'d for every onRunComplete numTotalTestSuites'
 });
 
+const assert_files_seen = new client.Gauge({
+  name: 'assert_files_seen',
+  help: 'Unique spec file paths that have been seen in onTestResult'
+});
+
+const assert_completions_passed = new client.Gauge({
+  name: 'assert_completions_passed',
+  help: 'Gets a value if a spec names assert-completion.spec.js has run'
+});
+
+const assert_completions_remaining = new client.Gauge({
+  name: 'assert_completions_remaining',
+  help: 'The number of failures for assert-completion.spec.js (pending and todo are ignored)'
+});
+
 class MetricsServer {
 
   constructor({ port, getMetrics }) {
@@ -75,6 +90,7 @@ class MetricsReporter {
   constructor(globalConfig, options) {
     this._globalConfig = globalConfig;
     this._options = options;
+    this._pathsSeen = {};
   }
 
   onRunStart() {
@@ -100,7 +116,27 @@ class MetricsReporter {
   }
 
   onTestResult(test, testResult, aggregatedResult) {
-    //console.log('onTestResult', testResult, aggregatedResult);
+    console.log('onTestResult', testResult);
+    const path = testResult.testFilePath;
+    if (!this._pathsSeen[path]) {
+      console.log('Saw new spec path', path);
+      this._pathsSeen[path] = {};
+      assert_files_seen.inc(1);
+    }
+    if (this.isAssertCompletion(path)) {
+      this.onAssertCompletion(testResult);
+    }
+  }
+
+  isAssertCompletion(testFilePath) {
+    const match = /.*\/assert-completion\.spec\.js$/.test(testFilePath);
+    console.log('Completion?', testFilePath, match);
+    return match;
+  }
+
+  onAssertCompletion(testResult) {
+    assert_completions_passed.set(testResult.numPassingTests);
+    assert_completions_remaining.set(testResult.numFailingTests);
   }
 
 }
