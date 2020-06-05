@@ -91,16 +91,16 @@ class MetricsReporter {
     test_suites_run_total.inc(results.numTotalTestSuites);
     tests_run.set(results.numTotalTests);
     tests_run_total.inc(results.numTotalTests);
-  }
-  
-  onTestResult(test, testResult, aggregatedResult) {
-    assertions_failed.set(testResult.numFailingTests);
-    assertions_failed_total.inc(testResult.numFailingTests);
-    //console.log('onTestResult', testResult, aggregatedResult);
+    assertions_failed.set(results.numFailedTests);
+    assertions_failed_total.inc(results.numFailedTests);
     if (!this._globalConfig.watch && !this._globalConfig.watchAll) {
       //console.log('Not a watch run. Exiting');
       server.stop();
     }
+  }
+
+  onTestResult(test, testResult, aggregatedResult) {
+    //console.log('onTestResult', testResult, aggregatedResult);
   }
 
 }
