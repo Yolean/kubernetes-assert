@@ -1,9 +1,13 @@
-const fetch = require('node-fetch');
 
 describe("A sub-module", () => {
 
-  it("Can use the runtime's default dependencies", () => {
+  it("Can use the runtime's global helpers", () => {
     expect(fetch).toBeDefined();
+  });
+
+  it("Can use the runtime's default dependencies", () => {
+    expect(require('node-fetch')).toBeDefined();
+    expect(require('@kubernetes/client-node')).toBeDefined();
   });
 
   it("Gets the metrics reporter despite having its own package.json", async () => {
