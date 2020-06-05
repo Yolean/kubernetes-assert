@@ -1,8 +1,4 @@
 
-// TODO
-const promFetch = require('node-fetch');
-const promValue = require('node-fetch');
-
 // The recommended approach for assert_completions is ...
 // - Check test health indirectly through Prometheus
 // - For example existence of some key metric of the system under test
