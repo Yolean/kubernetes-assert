@@ -18,3 +18,5 @@ build:
       infer: ["**/*"]
 deploy:
   kustomize: {}
+profiles:
+- name: y-assert
