@@ -116,10 +116,9 @@ class MetricsReporter {
   }
 
   onTestResult(test, testResult, aggregatedResult) {
-    console.log('onTestResult', testResult);
+    //console.log('onTestResult', testResult);
     const path = testResult.testFilePath;
     if (!this._pathsSeen[path]) {
-      console.log('Saw new spec path', path);
       this._pathsSeen[path] = {};
       assert_files_seen.inc(1);
     }
@@ -130,7 +129,6 @@ class MetricsReporter {
 
   isAssertCompletion(testFilePath) {
     const match = /.*\/assert-completion\.spec\.js$/.test(testFilePath);
-    console.log('Completion?', testFilePath, match);
     return match;
   }
 
