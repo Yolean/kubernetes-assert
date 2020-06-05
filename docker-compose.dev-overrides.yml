@@ -1,0 +1,27 @@
+version: '2.4'
+services:
+
+  server:
+    ports:
+    - 17243:17243
+
+  agent:
+    ports:
+    # Failed to get traefik to work in docker-compose; using a predefined nodeport range instead
+    #- 80:80
+    #- 443:443
+    - "31720-31729:31720-31729"
+    mem_limit: 8589934592
+    memswap_limit: 0
+
+  sut:
+    environment:
+    - KEEP_RUNNING=true
+
+volumes:
+  admin:
+    driver: local
+    driver_opts:
+      type: none
+      device: $PWD/test
+      o: bind

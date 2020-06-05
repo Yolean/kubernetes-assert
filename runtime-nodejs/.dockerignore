@@ -1,0 +1,7 @@
+*
+!.gitignore
+!package.json
+!package-lock.json
+!jest.*.js
+!specs
+!waiting-for-specs

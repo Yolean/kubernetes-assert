@@ -1,0 +1,10 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test
+spec:
+  template:
+    spec:
+      containers:
+      - name: runtime
+        image: builds-registry.ystack.svc.cluster.local/yolean/kubernetes-assert/runtime-nodejs

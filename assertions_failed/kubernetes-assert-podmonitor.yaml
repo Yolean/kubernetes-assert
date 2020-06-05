@@ -1,0 +1,14 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: kubernetes-assert-metrics
+  # Note that this excludes labels; see ../base-label-prometheus-now/
+spec:
+  jobLabel: kubernetes-assert
+  namespaceSelector:
+    any: true
+  selector:
+    matchLabels:
+      kubernetes-assert: metrics
+  podMetricsEndpoints:
+  - port: prometheus

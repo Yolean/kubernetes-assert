@@ -1,0 +1,7 @@
+{
+  "name": "@yolean/assert-runtime-nodejs-example-project",
+  "version": "1.0.0",
+  "dependencies": {
+    "@fidm/x509": "1.2.1"
+  }
+}

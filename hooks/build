@@ -1,0 +1,48 @@
+#!/bin/bash
+set -e
+
+[ -z "$IMAGE_NAME" ] && echo "IMAGE_NAME is required" && exit 1;
+
+function imagename {
+  buildname=$1
+  case $IMAGE_NAME in
+    *:latest) echo -n $IMAGE_NAME | sed "s|:latest|:$buildname|" ;;
+    *:*) echo -n $IMAGE_NAME | sed "s|:\(.*\)|:\1-$buildname|" ;;
+    *) echo $IMAGE_NAME:$buildname ;;
+  esac
+}
+
+if [ "$YOLEAN_PROMOTE" != "true" ]; then
+  docker build -t $IMAGE_NAME .
+else
+  YOLEAN_PROMOTE_TAG="$(curl -L 'https://hub.docker.com/api/audit/v1/build/?include_related=true&offset=0&limit=10&object=%2Fapi%2Frepo%2Fv1%2Frepository%2Fsolsson%2Fkubernetes-assert%2F' | jq -r '.objects[0].commit')"
+  echo "Latest build's git ref is $YOLEAN_PROMOTE_TAG, right?"
+  read -p "Verified? [y/n] " ok && [ "$ok" = "y" ] || exit 1
+fi
+
+CONTEXTS="
+runtime-nodejs
+specs
+"
+
+PUSH=""
+
+for CONTEXT in $CONTEXTS; do
+
+  CONTEXT_IMAGE_NAME=$(imagename $CONTEXT)
+
+  if [ "$YOLEAN_PROMOTE" != "true" ]; then
+    docker build -t $CONTEXT_IMAGE_NAME ./$CONTEXT
+    PUSH="$PUSH $CONTEXT_IMAGE_NAME"
+  else
+    YOLEAN_PROMOTE_NAME=yolean/assert-$CONTEXT:$YOLEAN_PROMOTE_TAG
+    docker pull $CONTEXT_IMAGE_NAME
+    docker tag $CONTEXT_IMAGE_NAME $YOLEAN_PROMOTE_NAME
+    docker tag $CONTEXT_IMAGE_NAME yolean/assert-$CONTEXT:latest
+    PUSH="$PUSH $YOLEAN_PROMOTE_NAME yolean/assert-$CONTEXT:latest"
+  fi
+done
+
+echo "PUSH list contains: $PUSH"
+[ -z "$NOPUSH" ] || exit 0
+for P in $PUSH; do docker push $P; done

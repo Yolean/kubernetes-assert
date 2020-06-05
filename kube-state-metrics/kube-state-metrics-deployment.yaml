@@ -20,7 +20,7 @@ spec:
         - --port=8081
         - --telemetry-host=0.0.0.0
         - --telemetry-port=8082
-        image: quay.io/coreos/kube-state-metrics:v1.9.6@sha256:7baf75cfa9f70966f2d1f9e724edfb8970fd0ce817fc59887f650cf83b92a14d
+        image: quay.io/coreos/kube-state-metrics:v1.9.7@sha256:2f82f0da199c60a7699c43c63a295c44e673242de0b7ee1b17c2d5a23bec34cb
         name: kube-state-metrics
         ports:
         - name: web

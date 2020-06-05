@@ -1,0 +1,31 @@
+# `skaffold dev` then add or edit specs under ./src
+# `kubectl exec $(kubectl get pods -l sut=runtime -o name) -c runtime -- curl -s http://localhost:9090/metrics`
+apiVersion: skaffold/v2beta4
+kind: Config
+metadata:
+  name: assert-runtime-nodejs
+build:
+  tagPolicy:
+    gitCommit:
+      variant: CommitSha
+  artifacts:
+  - image: builds-registry.ystack.svc.cluster.local/yolean/kubernetes-assert/runtime-nodejs
+    context: ./
+    custom:
+      buildCommand: y-build
+      dependencies:
+        dockerfile:
+          path: Dockerfile
+    sync:
+      manual:
+      # at skaffold dev this is the runtime's specs, which is wy it differs from the COPY directive in the Dockerfile
+      - src: 'specs/**'
+        dest: /usr/src
+test:
+- image: builds-registry.ystack.svc.cluster.local/yolean/kubernetes-assert/runtime-nodejs
+  structureTests:
+  - './structure-test/*'
+deploy:
+  kustomize:
+    paths:
+    - dev-ystack

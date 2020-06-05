@@ -1,0 +1,8 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+bases:
+- ../rbac-readonly
+resources:
+- scrapeable-deployment.yaml
+# TODO if many tests reuse this base, how do we manage podmonitor?
+#- kustomize/scrapeable-podmonitor.yaml
