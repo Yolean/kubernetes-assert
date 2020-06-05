@@ -37,6 +37,21 @@ const test_suites_run_total = new client.Counter({
   help: 'inc\'d for every onRunComplete numTotalTestSuites'
 });
 
+const assert_files_seen = new client.Gauge({
+  name: 'assert_files_seen',
+  help: 'Unique spec file paths that have been seen in onTestResult'
+});
+
+const assert_completions_passed = new client.Gauge({
+  name: 'assert_completions_passed',
+  help: 'Gets a value if a spec names assert-completion.spec.js has run'
+});
+
+const assert_completions_remaining = new client.Gauge({
+  name: 'assert_completions_remaining',
+  help: 'The number of failures for assert-completion.spec.js (pending and todo are ignored)'
+});
+
 class MetricsServer {
 
   constructor({ port, getMetrics }) {
@@ -75,6 +90,7 @@ class MetricsReporter {
   constructor(globalConfig, options) {
     this._globalConfig = globalConfig;
     this._options = options;
+    this._pathsSeen = {};
   }
 
   onRunStart() {
@@ -91,16 +107,35 @@ class MetricsReporter {
     test_suites_run_total.inc(results.numTotalTestSuites);
     tests_run.set(results.numTotalTests);
     tests_run_total.inc(results.numTotalTests);
-  }
-  
-  onTestResult(test, testResult, aggregatedResult) {
-    assertions_failed.set(testResult.numFailingTests);
-    assertions_failed_total.inc(testResult.numFailingTests);
-    //console.log('onTestResult', testResult, aggregatedResult);
+    assertions_failed.set(results.numFailedTests);
+    assertions_failed_total.inc(results.numFailedTests);
     if (!this._globalConfig.watch && !this._globalConfig.watchAll) {
       //console.log('Not a watch run. Exiting');
       server.stop();
     }
+    // onRunComplete seems to happen before each onTestResult so this placement isn't great
+    assert_files_seen.set(Object.keys(this._pathsSeen).length);
+  }
+
+  onTestResult(test, testResult, aggregatedResult) {
+    //console.log('onTestResult', testResult);
+    const path = testResult.testFilePath;
+    if (!this._pathsSeen[path]) {
+      this._pathsSeen[path] = {};
+    }
+    if (this.isAssertCompletion(path)) {
+      this.onAssertCompletion(testResult);
+    }
+  }
+
+  isAssertCompletion(testFilePath) {
+    const match = /.*\/assert-completion\.spec\.js$/.test(testFilePath);
+    return match;
+  }
+
+  onAssertCompletion(testResult) {
+    assert_completions_passed.set(testResult.numPassingTests);
+    assert_completions_remaining.set(testResult.numFailingTests);
   }
 
 }
