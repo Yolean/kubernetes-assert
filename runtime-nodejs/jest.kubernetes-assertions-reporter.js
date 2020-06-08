@@ -44,16 +44,6 @@ const assert_files_seen = new client.Gauge({
   help: 'Unique spec file paths that have been seen in onTestResult'
 });
 
-const assert_completions_passed = new client.Gauge({
-  name: 'assert_completions_passed',
-  help: 'Gets a value if a spec names assert-completion.spec.js has run'
-});
-
-const assert_completions_remaining = new client.Gauge({
-  name: 'assert_completions_remaining',
-  help: 'The number of failures for assert-completion.spec.js (pending and todo are ignored)'
-});
-
 class MetricsServer {
 
   constructor({ port, getMetrics }) {
@@ -115,8 +105,6 @@ class MetricsReporter {
       //console.log('Not a watch run. Exiting');
       server.stop();
     }
-    // onRunComplete seems to happen before each onTestResult so this placement isn't great
-    assert_files_seen.set(Object.keys(this._pathsSeen).length);
   }
 
   onTestResult(test, testResult, aggregatedResult) {
@@ -124,20 +112,8 @@ class MetricsReporter {
     const path = testResult.testFilePath;
     if (!this._pathsSeen[path]) {
       this._pathsSeen[path] = {};
+      assert_files_seen.inc();
     }
-    if (this.isAssertCompletion(path)) {
-      this.onAssertCompletion(testResult);
-    }
-  }
-
-  isAssertCompletion(testFilePath) {
-    const match = /.*\/assert-completion\.spec\.js$/.test(testFilePath);
-    return match;
-  }
-
-  onAssertCompletion(testResult) {
-    assert_completions_passed.set(testResult.numPassingTests);
-    assert_completions_remaining.set(testResult.numFailingTests);
   }
 
 }
