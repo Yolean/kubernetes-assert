@@ -1,6 +1,6 @@
 // TODO a https://jestjs.io/docs/en/watch-plugins might be better suited to the task
 
-console.log('Reporter loaded');
+console.log('Assert reporter loaded, see github.com/Yolean/kubernetes-assert');
 
 const http = require('http');
 
@@ -57,7 +57,6 @@ const assert_completions_remaining = new client.Gauge({
 class MetricsServer {
 
   constructor({ port, getMetrics }) {
-    console.log('metrics server init', port, typeof getMetrics);
     this.port = port;
     this.getMetrics = getMetrics;
   }
@@ -72,6 +71,7 @@ class MetricsServer {
       socket.end('HTTP/1.1 400 Bad Request\r\n\r\n');
     });
     this.server.listen(this.port, '0.0.0.0');
+    console.log('Server listening on port', this.port);
   }
 
   stop() {
