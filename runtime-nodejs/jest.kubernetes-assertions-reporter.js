@@ -2,10 +2,15 @@ const fs = require('fs');
 const http = require('http');
 
 const PORT = process.env.PORT ? parseInt(process.env.PORT) : 9091;
+const RERUN_INTERVAL = parseInt(process.env.RERUN_INTERVAL);
+const ASSERT_IS_DEV = process.env.ASSERT_IS_DEV === 'true';
 
 const client = require('prom-client');
 const register = client.register;
 
+// REVIEW there might be a major issue with how we increase this value based on test runs,
+// if a run doesn't include all specs.
+// For the dev experience it's important to only run changed tests, as logs get too noisy otherwise.
 const assertions_failed = new client.Gauge({
   name: 'assertions_failed',
   help: 'current onTestResult numFailingTests',
@@ -43,25 +48,15 @@ const assert_files_seen = new client.Gauge({
 
 class SpecFilesTracker {
 
-  constructor(rerunOptions) {
+  constructor() {
     this._pathsSeen = {};
-    if (rerunOptions.onNoChangeSeconds) {
-      const rerun = this._rerun = {}
-      this.onPathSeen = () => {
-        if (rerun.interval) clearInterval(rerun.interval);
-        rerun.interval = setInterval(() => {
-          console.log('Rerunning all due to no runs triggered by watch');
-          this.modifyAll();
-        }, rerunOptions.onNoChangeSeconds * 1000);
-      }
-    }
   }
 
   pathSeen(path) {
     if (!this._pathsSeen[path]) {
       this._pathsSeen[path] = {};
       assert_files_seen.inc();
-      console.log('New path', path);
+      console.log('Path reported for the first time:', path);
     }
   }
 
@@ -74,19 +69,46 @@ class SpecFilesTracker {
 
   modifyAll() {
     const modify = this.modify.bind(this);
-    Object.keys(this._pathsSeen).map(path => {
+    const paths = Object.keys(this._pathsSeen);
+    console.log('Files will be modified to trigger rerun:', paths);
+    paths.map(path => {
+      // We prefer to do this as concurrent as possible, to trigger a single run, so don't wait
       modify(path);
     });
   }
 
 }
 
-const rerunOptions = {};
-if (process.env.RERUN_NO_CHANGE_SECONDS) {
-  rerunOptions.onNoChangeSeconds = parseInt(process.env.RERUN_NO_CHANGE_SECONDS);
+const tracker = new SpecFilesTracker();
+
+/*
+ * The idea ...
+ * We'll only get good specs if the development experience is attractive
+ * which is why runtime-nodejs prioritizes the use case skaffold dev with sync
+ * Until https://github.com/facebook/jest/issues/5048 https://github.com/facebook/jest/issues/8868 are fixed
+ * ... or we want to give something like https://medium.com/web-developers-path/how-to-run-jest-programmatically-in-node-js-jest-javascript-api-492a8bc250de a try
+ * ... or we find a way to emulate interactive watch keypresses
+ * it'll mean that we run watch always and that the unattended run mode will be a bit of a hack
+ * The basic requirement is that tests are rerun.
+ * We rerun all tests, not only failed, because when it comes to infra things go up and down.
+ */
+class Reruns {
+
+  constructor({ tracker, intervalMs }) {
+    console.log('Activating reruns with interval (ms)', intervalMs);
+    this._interval = setInterval(() => {
+      tracker.modifyAll();
+    }, intervalMs);
+  }
+
 }
 
-const tracker = new SpecFilesTracker(rerunOptions);
+if (!ASSERT_IS_DEV && RERUN_INTERVAL) {
+  const reruns = new Reruns({
+    tracker,
+    intervalMs: RERUN_INTERVAL * 1000
+  });
+}
 
 class MetricsServer {
 
@@ -101,7 +123,8 @@ class MetricsServer {
   }
 
   serveRerun(res) {
-    tracker.modifyAll(); // Would there be a point with waiting?
+    console.log('Rerun endpoint called');
+    tracker.modifyAll();
     res.writeHead(200, { 'Content-Type': 'text/plain' });
     res.end('{}');
   }
@@ -139,6 +162,8 @@ class MetricsReporter {
   constructor(globalConfig, options) {
     this._globalConfig = globalConfig;
     this._options = options;
+    // Can't change how Jest instantiates the reporter, so get this one from global
+    this._tracker = tracker;
   }
 
   onRunStart() {
@@ -151,7 +176,6 @@ class MetricsReporter {
 
   onRunComplete(contexts, results) {
     //console.log('onRunComplete', contexts, results);
-    console.log('onRunComplete');
     test_suites_run.set(results.numTotalTestSuites);
     test_suites_run_total.inc(results.numTotalTestSuites);
     tests_run.set(results.numTotalTests);
@@ -166,7 +190,7 @@ class MetricsReporter {
 
   onTestResult(test, testResult, aggregatedResult) {
     //console.log('onTestResult', testResult);
-    tracker.pathSeen(testResult.testFilePath);
+    this._tracker.pathSeen(testResult.testFilePath);
   }
 
 }
