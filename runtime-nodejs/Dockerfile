@@ -22,6 +22,7 @@ RUN [ "git", "init" ]
 RUN [ "npm", "ci", "--ignore-scripts" ]
 # The above should be identical to the unittest stage
 
+ENV RERUN_NO_CHANGE_SECONDS=60
 ENTRYPOINT [ "/usr/src/node_modules/.bin/jest", "--projects=/usr/src", "--watch", "--passWithNoTests" ]
 
 # We could copy from context but buildkit won't run the unittest stage unless we somehow depend on the result

@@ -43,8 +43,18 @@ const assert_files_seen = new client.Gauge({
 
 class SpecFilesTracker {
 
-  constructor() {
+  constructor(rerunOptions) {
     this._pathsSeen = {};
+    if (rerunOptions.onNoChangeSeconds) {
+      const rerun = this._rerun = {}
+      this.onPathSeen = () => {
+        if (rerun.interval) clearInterval(rerun.interval);
+        rerun.interval = setInterval(() => {
+          console.log('Rerunning all due to no runs triggered by watch');
+          this.modifyAll();
+        }, rerunOptions.onNoChangeSeconds * 1000);
+      }
+    }
   }
 
   pathSeen(path) {
@@ -71,7 +81,12 @@ class SpecFilesTracker {
 
 }
 
-const tracker = new SpecFilesTracker();
+const rerunOptions = {};
+if (process.env.RERUN_NO_CHANGE_SECONDS) {
+  rerunOptions.onNoChangeSeconds = parseInt(process.env.RERUN_NO_CHANGE_SECONDS);
+}
+
+const tracker = new SpecFilesTracker(rerunOptions);
 
 class MetricsServer {
 
@@ -136,6 +151,7 @@ class MetricsReporter {
 
   onRunComplete(contexts, results) {
     //console.log('onRunComplete', contexts, results);
+    console.log('onRunComplete');
     test_suites_run.set(results.numTotalTestSuites);
     test_suites_run_total.inc(results.numTotalTestSuites);
     tests_run.set(results.numTotalTests);
