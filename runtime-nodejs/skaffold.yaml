@@ -1,5 +1,3 @@
-# `skaffold dev` then add or edit specs under ./src
-# `kubectl exec $(kubectl get pods -l sut=runtime -o name) -c runtime -- curl -s http://localhost:9090/metrics`
 apiVersion: skaffold/v2beta4
 kind: Config
 metadata:
@@ -18,7 +16,7 @@ build:
           path: Dockerfile
     sync:
       manual:
-      # at skaffold dev this is the runtime's specs, which is wy it differs from the COPY directive in the Dockerfile
+      # With skaffold dev this is the runtime's specs, which is why it differs from the COPY directive in the Dockerfile
       - src: 'specs/**'
         dest: /usr/src
 test:

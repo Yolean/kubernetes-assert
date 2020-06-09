@@ -44,8 +44,8 @@ spec:
               # This will be true for run --tail as well but that's also a dev-loop use case
               fieldPath: metadata.labels['skaffold.dev/tail']
         ports:
-        - containerPort: 9090
-          name: prometheus
+        - containerPort: 9091
+          name: metrics
       # TODO how to do composition at runtime, in Kubernetes, on a file system level?
       # We need to keep the spec builds small, and rely on sync
       # We must support both skaffold run (no file sync) and skaffold dev (with file sync)

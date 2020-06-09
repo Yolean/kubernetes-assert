@@ -4,6 +4,8 @@ console.log('Reporter loaded');
 
 const http = require('http');
 
+const PORT = process.env.PORT ? parseInt(process.env.PORT) : 9091;
+
 const client = require('prom-client');
 const register = client.register;
 
@@ -79,7 +81,7 @@ class MetricsServer {
 }
 
 const server = new MetricsServer({
-  port: 9090,
+  port: PORT,
   getMetrics: () => register.metrics()
 });
 
