@@ -8,12 +8,9 @@ const ASSERT_IS_DEV = process.env.ASSERT_IS_DEV === 'true';
 const client = require('prom-client');
 const register = client.register;
 
-// REVIEW there might be a major issue with how we increase this value based on test runs,
-// if a run doesn't include all specs.
-// For the dev experience it's important to only run changed tests, as logs get too noisy otherwise.
 const assertions_failed = new client.Gauge({
   name: 'assertions_failed',
-  help: 'current onTestResult numFailingTests',
+  help: 'current onTestResult numFailingTests (or TODO adjusted for omitted files)',
 });
 
 const assertions_failed_total = new client.Counter({
@@ -176,21 +173,26 @@ class MetricsReporter {
 
   onRunComplete(contexts, results) {
     //console.log('onRunComplete', contexts, results);
+    const { testResults } = results;
+    let numFailedTests = 0;
+    for (let i = 0; i < testResults.length; i++) {
+      const { testFilePath, numFailingTests } = testResults[i];
+      this._tracker.pathSeen(testFilePath, { numFailingTests });
+      numFailedTests += numFailingTests;
+    }
+    // This metric is special and must not be reported until there's results, and TODO not be decreased because a spec is omitted from a test run
+    if (testResults.length) {
+      assertions_failed.set(numFailedTests);
+    }
     test_suites_run.set(results.numTotalTestSuites);
     test_suites_run_total.inc(results.numTotalTestSuites);
     tests_run.set(results.numTotalTests);
     tests_run_total.inc(results.numTotalTests);
-    assertions_failed.set(results.numFailedTests);
     assertions_failed_total.inc(results.numFailedTests);
     if (!this._globalConfig.watch && !this._globalConfig.watchAll) {
       //console.log('Not a watch run. Exiting');
       server.stop();
     }
-  }
-
-  onTestResult(test, testResult, aggregatedResult) {
-    //console.log('onTestResult', testResult);
-    this._tracker.pathSeen(testResult.testFilePath);
   }
 
 }
