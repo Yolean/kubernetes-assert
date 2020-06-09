@@ -38,6 +38,11 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: spec.serviceAccountName
+        - name: ASSERT_IS_DEV
+          valueFrom:
+            fieldRef:
+              # This will be true for run --tail as well but that's also a dev-loop use case
+              fieldPath: metadata.labels['skaffold.dev/tail']
         ports:
         - containerPort: 9090
           name: prometheus
