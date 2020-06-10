@@ -10,7 +10,7 @@ const register = client.register;
 
 const assertions_failed = new client.Gauge({
   name: 'assertions_failed',
-  help: 'current onTestResult numFailingTests (or TODO adjusted for omitted files)',
+  help: 'current numFailingTests incrementally aggregated per run per path',
 });
 
 const assertions_failed_total = new client.Counter({
@@ -49,12 +49,16 @@ class SpecFilesTracker {
     this._pathsSeen = {};
   }
 
-  pathSeen(path) {
-    if (!this._pathsSeen[path]) {
+  pathSeen(path, { numFailingTests }) {
+    if (this._pathsSeen.hasOwnProperty(path)) {
+      assertions_failed.inc(numFailingTests - this._pathsSeen[path].numFailingTests);
+    } else {
       this._pathsSeen[path] = {};
       assert_files_seen.inc();
+      assertions_failed.inc(numFailingTests);
       console.log('Path reported for the first time:', path);
     }
+    this._pathsSeen[path].numFailingTests = numFailingTests;
   }
 
   modify(path) {
@@ -179,10 +183,6 @@ class MetricsReporter {
       const { testFilePath, numFailingTests } = testResults[i];
       this._tracker.pathSeen(testFilePath, { numFailingTests });
       numFailedTests += numFailingTests;
-    }
-    // This metric is special and must not be reported until there's results, and TODO not be decreased because a spec is omitted from a test run
-    if (testResults.length) {
-      assertions_failed.set(numFailedTests);
     }
     test_suites_run.set(results.numTotalTestSuites);
     test_suites_run_total.inc(results.numTotalTestSuites);
