@@ -11,4 +11,4 @@ spec:
     matchLabels:
       kubernetes-assert: metrics
   podMetricsEndpoints:
-  - port: metrics
+  - port: assert
