@@ -63,7 +63,8 @@ class SpecFilesTracker {
 
   modify(path) {
     const insignificant = '\n';
-    fs.appendFile(path, insignificant, 'utf8', () => {
+    fs.appendFile(path, insignificant, 'utf8', (err) => {
+      if (err) throw err;
       console.log('Modified', path);
     });
   }
