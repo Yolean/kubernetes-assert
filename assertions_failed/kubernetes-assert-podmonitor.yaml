@@ -1,7 +1,9 @@
+# Any metrics endpoint can export assertions_failed and friends,
+# but this selector is for pods that inherit from for example ../runtime-nodejs
 apiVersion: monitoring.coreos.com/v1
 kind: PodMonitor
 metadata:
-  name: kubernetes-assert-metrics
+  name: kubernetes-assert
   # Note that this excludes labels that matches the resource to a prometheus instance; see ../base-label-prometheus-now/
 spec:
   jobLabel: kubernetes-assert
