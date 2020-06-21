@@ -14,7 +14,7 @@ describe("Custom globals", () => {
   
     it("Returns a metric value as Number via Promise", async () => {
       const pod = process.env.POD_NAME;
-      const completions = await promValue(`assert_completions_remaining{pod="${pod}"}`);
+      const completions = await promValue(`assert_files_seen{pod="${pod}"}`);
       expect(completions).toBeGreaterThanOrEqual(0);
     });
 

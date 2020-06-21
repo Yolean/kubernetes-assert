@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "./node_modules/.bin/jest --testPathIgnorePatterns=example-.*"
+    "test": "./node_modules/.bin/jest"
   },
   "author": "",
   "license": "ISC",

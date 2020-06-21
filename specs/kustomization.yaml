@@ -1,11 +1,11 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 bases:
-- github.com/Yolean/kubernetes-assert/runtime-nodejs/kustomize?ref=930ee2627ac53b7e356ce6a317226a010ffe3c8d
-namePrefix: kubernetes-assert-specs-
+- ../runtime-nodejs/kustomize
+namePrefix: assert-specs-
 commonLabels:
-  app: kubernetes-assert
+  app: assert-specs
 images:
 - name: yolean/assert-runtime-nodejs
-  newName: builds-registry.ystack.svc.cluster.local/yolean/kubernetes-assert-specs
+  newName: builds-registry.ystack.svc.cluster.local:80/yolean/assert-specs
   newTag: null
