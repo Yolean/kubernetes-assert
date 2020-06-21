@@ -51,11 +51,13 @@ class SpecFilesTracker {
 
   pathSeen(path, { numFailingTests }) {
     if (this._pathsSeen.hasOwnProperty(path)) {
-      assertions_failed.inc(numFailingTests - this._pathsSeen[path].numFailingTests);
+      const delta = numFailingTests - this._pathsSeen[path].numFailingTests;
+      if (delta > 0) assertions_failed.inc(delta);
+      if (delta < 0) assertions_failed.dec(-delta);
     } else {
       this._pathsSeen[path] = {};
       assert_files_seen.inc();
-      assertions_failed.inc(numFailingTests);
+      if (numFailingTests > 0) assertions_failed.inc(numFailingTests);
       console.log('Path reported for the first time:', path);
     }
     this._pathsSeen[path].numFailingTests = numFailingTests;
@@ -185,11 +187,9 @@ class MetricsReporter {
   onRunComplete(contexts, results) {
     //console.log('onRunComplete', contexts, results);
     const { testResults } = results;
-    let numFailedTests = 0;
     for (let i = 0; i < testResults.length; i++) {
       const { testFilePath, numFailingTests } = testResults[i];
       this._tracker.pathSeen(testFilePath, { numFailingTests });
-      numFailedTests += numFailingTests;
     }
     test_suites_run.set(results.numTotalTestSuites);
     test_suites_run_total.inc(results.numTotalTestSuites);
