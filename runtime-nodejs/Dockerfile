@@ -22,7 +22,7 @@ RUN [ "git", "init" ]
 RUN [ "npm", "ci", "--ignore-scripts" ]
 # The above should be identical to the unittest stage
 
-ENV ASSERT_IS_DEV= RERUN_INTERVAL=30
+ENV ASSERT_IS_DEV= RERUN_WAIT=30
 
 ENTRYPOINT [ "/usr/src/node_modules/.bin/jest", "--projects=/usr/src", "--watch", "--passWithNoTests" ]
 

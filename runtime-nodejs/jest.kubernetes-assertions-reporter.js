@@ -2,7 +2,7 @@ const fs = require('fs');
 const http = require('http');
 
 const PORT = process.env.PORT ? parseInt(process.env.PORT) : 9091;
-const RERUN_INTERVAL = parseInt(process.env.RERUN_INTERVAL);
+const RERUN_WAIT = parseInt(process.env.RERUN_WAIT);
 const ASSERT_IS_DEV = process.env.ASSERT_IS_DEV === 'true';
 
 const client = require('prom-client');
@@ -65,7 +65,7 @@ class SpecFilesTracker {
     const insignificant = '\n';
     fs.appendFile(path, insignificant, 'utf8', (err) => {
       if (err) throw err;
-      console.log('Modified', path);
+      //console.log('Modified', path);
     });
   }
 
@@ -104,7 +104,7 @@ class Reruns {
 
   onRunComplete() {
     this._timeout !== null && clearTimeout(this._timeout);
-    if (!ASSERT_IS_DEV && RERUN_INTERVAL) {
+    if (!ASSERT_IS_DEV && RERUN_WAIT) {
       this._timeout = setTimeout(() => {
         tracker.modifyAll();
       }, this._intervalMs);
@@ -115,7 +115,7 @@ class Reruns {
 
 const reruns = new Reruns({
   tracker,
-  intervalMs: RERUN_INTERVAL * 1000
+  intervalMs: RERUN_WAIT * 1000
 });
 
 class MetricsServer {
