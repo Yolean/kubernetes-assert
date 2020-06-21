@@ -98,19 +98,25 @@ class Reruns {
 
   constructor({ tracker, intervalMs }) {
     console.log('Activating reruns with interval (ms)', intervalMs);
-    this._interval = setInterval(() => {
-      tracker.modifyAll();
-    }, intervalMs);
+    this._intervalMs = intervalMs;
+    this._timeout = null;
+  }
+
+  onRunComplete() {
+    this._timeout !== null && clearTimeout(this._timeout);
+    if (!ASSERT_IS_DEV && RERUN_INTERVAL) {
+      this._timeout = setTimeout(() => {
+        tracker.modifyAll();
+      }, this._intervalMs);
+    }
   }
 
 }
 
-if (!ASSERT_IS_DEV && RERUN_INTERVAL) {
-  const reruns = new Reruns({
-    tracker,
-    intervalMs: RERUN_INTERVAL * 1000
-  });
-}
+const reruns = new Reruns({
+  tracker,
+  intervalMs: RERUN_INTERVAL * 1000
+});
 
 class MetricsServer {
 
@@ -194,6 +200,7 @@ class MetricsReporter {
       //console.log('Not a watch run. Exiting');
       server.stop();
     }
+    reruns.onRunComplete();
   }
 
 }
