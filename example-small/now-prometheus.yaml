@@ -6,7 +6,7 @@ spec:
   replicas: 1
   retention: 2h
   serviceAccountName: prometheus
-  image: prom/prometheus:v2.18.1@sha256:5880ec936055fad18ccee798d2a63f64ed85bd28e8e0af17c6923a090b686c3d
+  image: prom/prometheus:v2.19.2@sha256:cd134bd4fca0f60ff8b4c679cebe5c5c5cf5e2da5f4886b2ae933da821915f92
   securityContext:
     runAsUser: 65534
     runAsGroup: 65534
