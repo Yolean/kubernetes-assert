@@ -7,19 +7,19 @@ configMapGenerator:
 - name: kubernetes-mixin-grafana-dashboards
   files:
   - namespace-by-pod.json=namespace-by-pod.json
-  - k8s-resources-cluster.json=k8s-resources-cluster.json
-  - scheduler.json=scheduler.json
-  - kubelet.json=kubelet.json
-  - statefulset.json=statefulset.json
-  - k8s-resources-namespace.json=k8s-resources-namespace.json
-  - apiserver.json=apiserver.json
-  - cluster-total.json=cluster-total.json
-  - k8s-resources-workload.json=k8s-resources-workload.json
-  - proxy.json=proxy.json
-  - workload-total.json=workload-total.json
-  - k8s-resources-node.json=k8s-resources-node.json
-  - k8s-resources-pod.json=k8s-resources-pod.json
-  - namespace-by-workload.json=namespace-by-workload.json
-  - pod-total.json=pod-total.json
   - persistentvolumesusage.json=persistentvolumesusage.json
+  - k8s-resources-pod.json=k8s-resources-pod.json
   - k8s-resources-workloads-namespace.json=k8s-resources-workloads-namespace.json
+  - k8s-resources-namespace.json=k8s-resources-namespace.json
+  - kubelet.json=kubelet.json
+  - workload-total.json=workload-total.json
+  - k8s-resources-workload.json=k8s-resources-workload.json
+  - namespace-by-workload.json=namespace-by-workload.json
+  - scheduler.json=scheduler.json
+  - k8s-resources-node.json=k8s-resources-node.json
+  - cluster-total.json=cluster-total.json
+  - apiserver.json=apiserver.json
+  - k8s-resources-cluster.json=k8s-resources-cluster.json
+  - statefulset.json=statefulset.json
+  - proxy.json=proxy.json
+  - pod-total.json=pod-total.json
