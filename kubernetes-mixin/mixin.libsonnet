@@ -6,7 +6,8 @@ kubernetes {
   _config+:: {
     kubeApiserverSelector: 'job="apiserver"',
     kubeSchedulerSelector: 'job="apiserver"',
-    kubeControllerManagerSelector: 'job="TODO-or-IGNORE"',
+    // KubeControllerManagerDown alert disabled by Yolean/kubernetes-assert; is there a better way than to negate the selector?
+    kubeControllerManagerSelector: 'job!="kube-controller-manager"',
     kubeStateMetricsSelector: 'job="kube-state-metrics"',
     nodeExporterSelector: 'job="node-exporter"',
     kubeletSelector: 'job="kubelet"',
