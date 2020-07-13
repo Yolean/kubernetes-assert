@@ -29,6 +29,5 @@ spec:
     - sourceLabels: [__meta_kubernetes_namespace]
       action: replace
       targetLabel: namespace
-    - sourceLabels: [__meta_kubernetes_pod_name]
-      action: replace
-      targetLabel: pod_name
+    - regex: '__meta_kubernetes_pod_name'
+      action: labeldrop
