@@ -20,10 +20,11 @@ spec:
         - --path.procfs=/host/proc
         - --path.sysfs=/host/sys
         - --path.rootfs=/host/root
-        - --collector.filesystem.ignored-mount-points=^/(dev|proc|sys|var/lib/docker/.+|var/lib/kubelet/pods/.+)($|/)
+        - --collector.filesystem.ignored-mount-points=^/(dev|proc|sys|var/lib/docker/.+|var/lib/containerd/.+|var/lib/kubelet/pods/.+)($|/)
         - --collector.disable-defaults
         - --collector.cpu
         - --collector.meminfo
+        - --collector.filesystem
         env:
         # is there any way to get node name into metrics' labels ("instance" is only the IP)?
         - name: NODE_NAME
