@@ -20,7 +20,7 @@ spec:
         - --path.procfs=/host/proc
         - --path.sysfs=/host/sys
         - --path.rootfs=/host/root
-        - --collector.filesystem.ignored-mount-points=^/(dev|proc|sys|var/lib/docker/.+|var/lib/containerd/.+|var/lib/kubelet/pods/.+)($|/)
+        - --collector.filesystem.ignored-mount-points=^/(dev|proc|sys|var/lib/docker/.+|var/lib/containerd/.+|run/containerd/.*|home/kubernetes/.*|var/lib/kubelet/pods/.+)($|/)
         - --collector.disable-defaults
         - --collector.cpu
         - --collector.meminfo
