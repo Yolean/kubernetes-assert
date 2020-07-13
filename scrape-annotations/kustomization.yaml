@@ -1,0 +1,2 @@
+resources:
+- pods-by-prometheus-io-annotations-servicemonitor.yaml

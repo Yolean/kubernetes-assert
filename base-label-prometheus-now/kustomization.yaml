@@ -8,3 +8,4 @@ bases:
 - ../kube-state-metrics
 - ../kubernetes-mixin
 - ../assertions_failed
+- ../scrape-annotations
