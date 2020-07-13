@@ -29,7 +29,7 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: spec.nodeName
-        image: prom/node-exporter:v1.0.0-rc.1@sha256:790ea2bce2774fa8ff9a7cfaf21792f297d840fb760b54f049bbcfb02ee1e79c
+        image: prom/node-exporter:v1.0.1@sha256:cf66a6bbd573fd819ea09c72e21b528e9252d58d01ae13564a29749de1e48e0f
         name: node-exporter
         ports:
         - name: web
