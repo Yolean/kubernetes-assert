@@ -4,6 +4,7 @@ local kubernetes = import "kubernetes-mixin/mixin.libsonnet";
 
 kubernetes {
   _config+:: {
+    cadvisorSelector: 'job="kubelet", metrics_path="/metrics/cadvisor"',
     kubeApiserverSelector: 'job="apiserver"',
     kubeSchedulerSelector: 'job="apiserver"',
     // KubeControllerManagerDown alert disabled by Yolean/kubernetes-assert; is there a better way than to negate the selector?
