@@ -8,5 +8,8 @@ datasources:
   isDefault: true
   version: 1
   editable: false
-  jsonData: 
+  jsonData:
     timeInterval: "30s"
+- name: Loki
+  type: loki
+  url: http://loki:3100
