@@ -1,0 +1,3 @@
+resources:
+- istio-ingressgateway-podmonitor.yaml
+- istiod-podmonitor.yaml

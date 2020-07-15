@@ -1,0 +1,28 @@
+# Note that namespace and commonLabels must be added by a kustomize base like ../base-label-prometheus-now/
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: istiod
+spec:
+  jobLabel: app
+  namespaceSelector:
+    # TODO didn't show up in Prometheus with false here and namespace=istio-system
+    any: true
+  selector:
+    matchLabels:
+      app: istiod
+  podMetricsEndpoints:
+  - path: /metrics
+    targetPort: 8080 # This field is deprecated but the deployment doesn't name its ports
+    relabelings:
+    # - sourceLabels: [__meta_kubernetes_pod_container_port_name]
+    #   action: keep
+    #   regex: '.*-envoy-prom'
+    - action: labeldrop
+      regex: "__meta_kubernetes_pod_label_(.+)"
+    - sourceLabels: [__meta_kubernetes_namespace]
+      action: replace
+      targetLabel: namespace
+    - sourceLabels: [__meta_kubernetes_pod_name]
+      action: replace
+      targetLabel: pod_name
