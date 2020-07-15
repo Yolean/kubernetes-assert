@@ -25,3 +25,5 @@ spec:
       targetLabel: namespace
     - regex: '__meta_kubernetes_pod_name'
       action: labeldrop
+    - regex: '__meta_kubernetes_pod_container_port_number'
+      action: labeldrop
