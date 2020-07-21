@@ -1,0 +1,13 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: assert-loadtest
+spec:
+  jobLabel: app
+  namespaceSelector:
+    any: false
+  selector:
+    matchLabels:
+      app: assert-loadtest
+  podMetricsEndpoints:
+  - port: resources
