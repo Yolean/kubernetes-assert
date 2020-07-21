@@ -1,0 +1,8 @@
+resources:
+- assert-loadtest-service.yaml
+- assert-loadtest-deployment.yaml
+- assert-loadtest-podmonitor.yaml
+# This is a test-only resource so let's assume that we can always apply ../base-label-prometheus-now/
+# TODO do we need to apply the podmonitor to the monitoring namespace?
+commonLabels:
+  prometheus: now
