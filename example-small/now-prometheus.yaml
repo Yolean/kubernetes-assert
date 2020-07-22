@@ -17,6 +17,8 @@ spec:
     - namespace: monitoring
       name: alertmanager-main
       port: web
+  serviceMonitorNamespaceSelector: {}
+  podMonitorNamespaceSelector: {}
   serviceMonitorSelector:
     matchLabels:
       prometheus: now
