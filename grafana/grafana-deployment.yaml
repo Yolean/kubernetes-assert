@@ -12,6 +12,9 @@ spec:
       labels:
         app: grafana
     spec:
+      securityContext:
+        fsGroup: 472
+        runAsUser: 472
       containers:
       - name: grafana
         image: grafana/grafana:7.1.0-ubuntu@sha256:b52a7fbf781ab88cba52de2776830e45d8de0aad497530fcaa5e826f8e21fb4b
@@ -115,7 +118,7 @@ spec:
         - name: GIT_SYNC_DEST
           value: "repo"
         - name: GIT_SYNC_ROOT
-          value: "/dashboards/opensource"
+          value: "/dashboards/imported"
         - name: GIT_SYNC_WAIT
           value: "2147483647"
         resources:
