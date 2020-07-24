@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: grafana
-        image: grafana/grafana:7.0.6-ubuntu@sha256:5098d8ce36dc8f85aeb1d19cf79616093cdb5f1c689a10aeda9ae13bac33180b
+        image: grafana/grafana:7.1.0-ubuntu@sha256:b52a7fbf781ab88cba52de2776830e45d8de0aad497530fcaa5e826f8e21fb4b
         env:
         # Has to be a kustomization
         # - name: GF_SERVER_ROOT_URL
@@ -87,8 +87,12 @@ spec:
         volumeMounts:
         - mountPath: /data
           name: data
-        - mountPath: /provisioning
-          name: grafana
+        - mountPath: /provisioning/datasources
+          name: provisioning-datasources
+        - mountPath: /provisioning/dashboards
+          name: provisioning-dashboards
+        - mountPath: /provisioning/plugins
+          name: provisioning-plugins
         - mountPath: /dashboards
           name: dashboards
         - mountPath: /dashboards/kubernetes-mixin
@@ -122,18 +126,20 @@ spec:
         - mountPath: /dashboards
           name: dashboards
       volumes:
-      - emptyDir: {}
-        name: data
-      - configMap:
-          items:
-          - key: dashboards.yaml
-            path: dashboards/dashboards.yaml
-          - key: datasources.yaml
-            path: datasources/datasources.yaml
-          name: grafana
-        name: grafana
-      - emptyDir: {}
-        name: dashboards
+      - name: data
+        emptyDir: {}
+      - name: provisioning-datasources
+        configMap:
+          name: grafana-provisioning-datasources
+      - name: provisioning-dashboards
+        configMap:
+          name: grafana-provisioning-dashboards
+      - name: provisioning-plugins
+        configMap:
+          name: grafana-provisioning-plugins
+          optional: true
+      - name: dashboards
+        emptyDir: {}
       - name: kubernetes-mixin-grafana-dashboards
         configMap:
           name: kubernetes-mixin-grafana-dashboards

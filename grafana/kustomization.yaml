@@ -5,7 +5,11 @@ resources:
 - grafana-service.yaml
 - grafana-deployment.yaml
 configMapGenerator:
-- name: grafana
+- name: grafana-provisioning-datasources
   files:
-  - datasources.yaml=config-datasources.yaml
-  - dashboards.yaml=config-dashboards.yaml
+  - prometheus-now.yaml=datasources-prometheus-now.yaml
+  - loki.yaml=datasources-loki.yaml
+- name: grafana-provisioning-dashboards
+  files:
+  - kubernetes-mixin.yaml=dashboards-kubernetes-mixin.yaml
+  - imported.yaml=dashboards-imported.yaml

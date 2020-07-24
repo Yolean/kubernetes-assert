@@ -1,0 +1,9 @@
+apiVersion: 1
+providers:
+- name: 'imported'
+  folder: ''
+  type: file
+  disableDeletion: false
+  editable: true
+  options:
+    path: /dashboards/imported/repo
