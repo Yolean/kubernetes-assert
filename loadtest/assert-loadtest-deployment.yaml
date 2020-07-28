@@ -24,8 +24,7 @@ spec:
         - name: resources
           containerPort: 8081
       - name: statusrandom
-        image: solsson/httpstatus-random
-        command: ["/webserver"] # TODO remove after next build
+        image: solsson/httpstatus-random@sha256:e4f17b403126ce165bde04fb7a2b743c4c6244c9caabc8a6f4f195e9a613bd95
         args:
         - --port
         -   "8082"
