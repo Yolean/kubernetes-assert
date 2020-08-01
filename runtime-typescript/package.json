@@ -1,0 +1,8 @@
+{
+  "name": "@yolean/assert-runtime-typescript",
+  "version": "1.0.0",
+  "dependencies": {
+    "ts-jest": "26.1.4",
+    "typescript": "3.9.7"
+  }
+}

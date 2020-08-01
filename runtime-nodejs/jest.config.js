@@ -1,4 +1,5 @@
 module.exports = {
+  preset: undefined,
   testEnvironment: 'node',
   reporters: [
     "default",

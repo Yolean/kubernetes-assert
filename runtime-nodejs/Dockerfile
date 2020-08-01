@@ -31,4 +31,4 @@ COPY --from=unittest /usr/src/jest.*.js ./
 
 COPY --chown=nonroot:nogroup waiting-for-specs ./specs
 
-WORKDIR /usr/src/specs--must-be-set-explicitly-by-downstream-images--for-now
+WORKDIR /usr/src/specs

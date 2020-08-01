@@ -16,6 +16,7 @@ docker build -t $IMAGE_NAME .
 
 CONTEXTS="
 runtime-nodejs
+runtime-typescript
 specs
 "
 
@@ -25,7 +26,7 @@ for CONTEXT in $CONTEXTS; do
 
   CONTEXT_IMAGE_NAME=$(imagename $CONTEXT)
 
-  docker build -t $CONTEXT_IMAGE_NAME -t yolean/assert-$CONTEXT:$SOURCE_COMMIT ./$CONTEXT
+  docker build -t $CONTEXT_IMAGE_NAME -t yolean/assert-$CONTEXT -t yolean/assert-$CONTEXT:$SOURCE_COMMIT ./$CONTEXT
   PUSH="$PUSH $CONTEXT_IMAGE_NAME yolean/assert-$CONTEXT:$SOURCE_COMMIT"
 
 done
