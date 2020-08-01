@@ -12,13 +12,7 @@ function imagename {
   esac
 }
 
-if [ "$YOLEAN_PROMOTE" != "true" ]; then
-  docker build -t $IMAGE_NAME .
-else
-  YOLEAN_PROMOTE_TAG="$(curl -L 'https://hub.docker.com/api/audit/v1/build/?include_related=true&offset=0&limit=10&object=%2Fapi%2Frepo%2Fv1%2Frepository%2Fsolsson%2Fkubernetes-assert%2F' | jq -r '.objects[0].commit')"
-  echo "Latest build's git ref is $YOLEAN_PROMOTE_TAG, right?"
-  read -p "Verified? [y/n] " ok && [ "$ok" = "y" ] || exit 1
-fi
+docker build -t $IMAGE_NAME .
 
 CONTEXTS="
 runtime-nodejs
@@ -31,16 +25,9 @@ for CONTEXT in $CONTEXTS; do
 
   CONTEXT_IMAGE_NAME=$(imagename $CONTEXT)
 
-  if [ "$YOLEAN_PROMOTE" != "true" ]; then
-    docker build -t $CONTEXT_IMAGE_NAME ./$CONTEXT
-    PUSH="$PUSH $CONTEXT_IMAGE_NAME"
-  else
-    YOLEAN_PROMOTE_NAME=yolean/assert-$CONTEXT:$YOLEAN_PROMOTE_TAG
-    docker pull $CONTEXT_IMAGE_NAME
-    docker tag $CONTEXT_IMAGE_NAME $YOLEAN_PROMOTE_NAME
-    docker tag $CONTEXT_IMAGE_NAME yolean/assert-$CONTEXT:latest
-    PUSH="$PUSH $YOLEAN_PROMOTE_NAME yolean/assert-$CONTEXT:latest"
-  fi
+  docker build -t $CONTEXT_IMAGE_NAME -t yolean/assert-$CONTEXT:$SOURCE_COMMIT ./$CONTEXT
+  PUSH="$PUSH $CONTEXT_IMAGE_NAME yolean/assert-$CONTEXT:$SOURCE_COMMIT"
+
 done
 
 echo "PUSH list contains: $PUSH"
