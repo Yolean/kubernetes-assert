@@ -17,7 +17,7 @@ spec:
         runAsUser: 472
       containers:
       - name: grafana
-        image: grafana/grafana:7.1.0-ubuntu@sha256:b52a7fbf781ab88cba52de2776830e45d8de0aad497530fcaa5e826f8e21fb4b
+        image: grafana/grafana:7.1.3-ubuntu@sha256:9ae07181ada7cf807e85c22ec532d13cfc23b978c8cba673b334bd786faa9a5a
         env:
         # Has to be a kustomization
         # - name: GF_SERVER_ROOT_URL
