@@ -1,0 +1,5 @@
+bases:
+- ../../runtime-nodejs/kustomize
+images:
+- name: yolean/assert-runtime-nodejs
+  newName: yolean/assert-runtime-typescript

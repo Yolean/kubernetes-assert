@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: test
+  name: specs
 spec:
   replicas: 1
   selector:
@@ -14,7 +14,7 @@ spec:
     spec:
       serviceAccountName: assert
       containers:
-      - name: runtime
+      - name: specs
         # We can't have a tag here because https://kubectl.docs.kubernetes.io/pages/reference/kustomize.html#images won't unset it, and Skaffold required no-tag URLs for build
         image: yolean/assert-runtime-nodejs
         env:
