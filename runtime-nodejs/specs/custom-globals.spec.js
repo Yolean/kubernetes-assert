@@ -24,4 +24,13 @@ describe("Custom globals", () => {
 
   });
 
+  describe("uuid", () => {
+
+    it("Is uuid v4", () => {
+      expect(uuid).toBeInstanceOf(Function);
+      expect(uuid()).toMatch(/^[a-z0-9-]{36}$/);
+    });
+
+  });
+
 });

@@ -1,6 +1,8 @@
+global.uuid = require('uuid').v4;
+
 global.fetch = require('node-fetch');
 
-global.prometheusHost = process.env.PROMETHEUS_HOST 
+global.prometheusHost = process.env.PROMETHEUS_HOST
   || 'http://prometheus-now.monitoring:9090';
 
 global.promFetch = (resource, init) => fetch(global.prometheusHost + resource, init);
