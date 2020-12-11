@@ -17,7 +17,7 @@ spec:
         runAsUser: 472
       containers:
       - name: grafana
-        image: grafana/grafana:7.1.3-ubuntu@sha256:9ae07181ada7cf807e85c22ec532d13cfc23b978c8cba673b334bd786faa9a5a
+        image: grafana/grafana:7.3.6-ubuntu@sha256:e2d9dc1293753739f59b8375de6d14bc0a250690f60fdce108971bb76c847da1
         env:
         # Has to be a kustomization
         # - name: GF_SERVER_ROOT_URL
@@ -111,7 +111,7 @@ spec:
           name: renderer
           protocol: TCP
       - name: git-sync
-        image: k8s.gcr.io/git-sync:v3.1.6@sha256:aa88eb188b3bd4bdd2a4237a4d7be2b8df0cad5be002ad82c13bf47aa2f9bd13
+        image: k8s.gcr.io/git-sync/git-sync:v3.2.0@sha256:873fc1bcd6048247036969dcb75f0b1f9c915167b86cb908f1fe3de0e060c562
         env:
         - name: GIT_SYNC_REPO
           value: "https://github.com/Yolean/grafana-dashboards"
