@@ -1,6 +1,6 @@
-FROM golang:1.14.4-buster@sha256:1af90b2bb59d67e2523ae79c03a4acc063d5fba670f856666c682a6369052393
+FROM golang:1.15.6-buster@sha256:f07de066d08e36e8c84da118bea13b448bc085364f6fc724c44744f6114c21a4
 
-COPY --from=grafana/jsonnet-build:1022b37@sha256:652621250431682611ec91ba254f7f9975199d209e0b6504514a7612f57fe6ab /usr/bin/jsonnet /usr/local/bin/jsonnet
+COPY --from=grafana/jsonnet-build:7f1cb84@sha256:b904486a187411ee6776b0f1bd098b3fa2f6c456589480952c89533c8e196c2d /usr/bin/jsonnet /usr/local/bin/jsonnet
 
 RUN go get github.com/jsonnet-bundler/jsonnet-bundler/cmd/jb
 RUN go get github.com/brancz/gojsontoyaml
