@@ -32,7 +32,7 @@ module.exports = class MetricsReporter {
       //console.log('Not a watch run. Exiting');
       this._server.stop();
     }
-    this._reruns.onRunComplete();
+    this._reruns.onRunComplete(contexts, results);
   }
 
 }

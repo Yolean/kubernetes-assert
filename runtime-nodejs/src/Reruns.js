@@ -12,16 +12,25 @@
  */
 module.exports = class Reruns {
 
-  constructor({ tracker, rerunWaitMs, assertIsDev }) {
+  constructor({ tracker, rerunWaitMs, assertIsDev, requiredSuccessions = 3 }) {
     console.log('Activating reruns with interval (ms)', rerunWaitMs);
     this._rerunWaitMs = rerunWaitMs;
     this._timeout = null;
     this._tracker = tracker;
     this._assertIsDev = assertIsDev;
+    this._requiredSuccessions = requiredSuccessions;
+
+    this._state = { successions: 0 };
   }
 
-  onRunComplete() {
+  onRunComplete(contexts, results) {
+    if (results.numFailedTests === 0) this._state.successions++;
+    else this._state.successions = 0;
+
     this._timeout !== null && clearTimeout(this._timeout);
+
+    if (this._state.successions > this._requiredSuccessions) return;
+
     if (!this._assertIsDev && this._rerunWaitMs) {
       this._timeout = setTimeout(() => {
         this._tracker.modifyAll();
