@@ -1,4 +1,4 @@
-FROM yolean/node:8fa14c0f3581c0e225072e303d6e011e861582cc@sha256:25830c903c575a26a88a2c20ddd7b221886063eef17590a80cf9c3cbed168f44 \
+FROM yolean/node:682b35452193e841717e6749a7de1df6e1ac4f6a@sha256:2ae6c3cfd92c8298cb57ce304c18d58523759e92ae92f668e8d1de97fa9876fb \
   as unittest
 
 ENV CI=true
@@ -13,7 +13,7 @@ RUN [ "npm", "ci", "--ignore-scripts" ]
 COPY --chown=nonroot:nogroup . .
 RUN [ "npm", "test" ]
 
-FROM yolean/node:8fa14c0f3581c0e225072e303d6e011e861582cc@sha256:25830c903c575a26a88a2c20ddd7b221886063eef17590a80cf9c3cbed168f44
+FROM yolean/node:682b35452193e841717e6749a7de1df6e1ac4f6a@sha256:2ae6c3cfd92c8298cb57ce304c18d58523759e92ae92f668e8d1de97fa9876fb
 
 ENV CI=true
 COPY --chown=nonroot:nogroup package*.json .gitignore /usr/src/
