@@ -2,6 +2,7 @@
 !.gitignore
 !package.json
 !package-lock.json
+!src
 !jest.*.js
 !specs
 !waiting-for-specs
