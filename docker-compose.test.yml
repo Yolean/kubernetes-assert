@@ -2,7 +2,7 @@ version: '2.4'
 services:
 
   server:
-    image: rancher/k3s:v1.17.5-k3s1@sha256:3025ecfa3c7c3a262a97435cb7c9c182d22b93d014bac767019d65bdce586786
+    image: solsson/ystack-runner:cc6234b863b09ec9272c598d5a2431f9f11b0317-k3s@sha256:2f49c334a5c75093ead3826bc5a72556007b9631d4f1c4e10d2e719ca00d43ed
     command:
     - server
     - --https-listen-port=17243
@@ -33,7 +33,7 @@ services:
   agent:
     depends_on:
     - server
-    image: rancher/k3s:v1.17.5-k3s1@sha256:3025ecfa3c7c3a262a97435cb7c9c182d22b93d014bac767019d65bdce586786
+    image: solsson/ystack-runner:cc6234b863b09ec9272c598d5a2431f9f11b0317-k3s@sha256:2f49c334a5c75093ead3826bc5a72556007b9631d4f1c4e10d2e719ca00d43ed
     tmpfs:
     - /run
     - /var/run
@@ -51,9 +51,9 @@ services:
     depends_on:
     - server
     - agent
-    image: solsson/ystack-runner@sha256:95aff82cb5245e93c8f3193253b054a5628f6421ddc5f93b5dfff0cf38d1bbc7
+    image: solsson/ystack-runner:cc6234b863b09ec9272c598d5a2431f9f11b0317@sha256:ffc2b8ac771af99c9a9dc4215f72285d33bdb318be58d2bb630e4e33266e69d8
     environment:
-    - PROMETHEUS_OPERATOR_BASE=github.com/coreos/prometheus-operator/?ref=9877ec897fc7ea4f50d947ca824ae0c30c185105
+    - PROMETHEUS_OPERATOR_BASE=github.com/coreos/prometheus-operator/?ref=02a5bac9610299372e9f77cbbe0c824ce636795b
     - KUBECONFIG_WAIT=30
     - KEEP_RUNNING=false
     volumes:
