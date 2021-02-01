@@ -8,7 +8,7 @@ RUN pwd
 WORKDIR /go/kubernetes-mixin
 COPY . .
 RUN jb init
-RUN jb install github.com/kubernetes-monitoring/kubernetes-mixin
+RUN jb install github.com/solsson/kubernetes-mixin
 RUN jsonnet -J vendor -S -e 'std.manifestYamlDoc((import "mixin.libsonnet").prometheusAlerts)' > prometheus_alerts.yaml
 RUN jsonnet -J vendor -S -e 'std.manifestYamlDoc((import "mixin.libsonnet").prometheusRules)' > prometheus_rules.yaml
 RUN mkdir dashboards_out && jsonnet -J vendor -m dashboards_out -e '(import "mixin.libsonnet").grafanaDashboards'
