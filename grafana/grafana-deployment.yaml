@@ -17,7 +17,7 @@ spec:
         runAsUser: 472
       containers:
       - name: grafana
-        image: grafana/grafana:7.3.6-ubuntu@sha256:e2d9dc1293753739f59b8375de6d14bc0a250690f60fdce108971bb76c847da1
+        image: grafana/grafana:7.4.0-beta1-ubuntu@sha256:166a44140004aa35c0be4cd1e6dc0c93273f6dc4f0fc3732bb2e85292cb893f7
         env:
         # Has to be a kustomization
         # - name: GF_SERVER_ROOT_URL
@@ -102,7 +102,7 @@ spec:
           name: kubernetes-mixin-grafana-dashboards
       # renderer should be a separate deployment to allow scale out, but so far we're just testing it
       - name: renderer
-        image: grafana/grafana-image-renderer:2.0.0@sha256:e2aa271b92c3c57b5e327c772d70595299216f9481bf65ca3f2d508bedccab7c
+        image: grafana/grafana-image-renderer:2.0.1@sha256:d0c6271cb7f4f7588e1cfda31756e31bd39d5e5bd0e0c7453716e97f16af3126
         env:
         - name: ENABLE_METRICS
           value: "true"
@@ -111,7 +111,7 @@ spec:
           name: renderer
           protocol: TCP
       - name: git-sync
-        image: k8s.gcr.io/git-sync/git-sync:v3.2.0@sha256:873fc1bcd6048247036969dcb75f0b1f9c915167b86cb908f1fe3de0e060c562
+        image: k8s.gcr.io/git-sync/git-sync:v3.2.2@sha256:6a543fb2d1e92008aad697da2672478dcfac715e3dddd33801d772da6e70cf24
         env:
         - name: GIT_SYNC_REPO
           value: "https://github.com/Yolean/grafana-dashboards"
