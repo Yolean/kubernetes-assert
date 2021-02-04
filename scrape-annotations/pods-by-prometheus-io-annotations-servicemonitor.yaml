@@ -12,6 +12,8 @@ spec:
   podMetricsEndpoints:
   - interval: 30s
     relabelings:
+    - regex: 'container'
+      action: labeldrop
     - sourceLabels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
       action: keep
       regex: 'true'
