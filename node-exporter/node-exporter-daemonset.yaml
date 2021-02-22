@@ -27,6 +27,7 @@ spec:
         - --collector.cpu
         - --collector.meminfo
         - --collector.filesystem
+        - --collector.processes
         env:
         # is there any way to get node name into metrics' labels ("instance" is only the IP)?
         - name: NODE_NAME
