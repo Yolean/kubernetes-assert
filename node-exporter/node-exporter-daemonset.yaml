@@ -33,7 +33,7 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: spec.nodeName
-        image: prom/node-exporter:v1.0.1@sha256:cf66a6bbd573fd819ea09c72e21b528e9252d58d01ae13564a29749de1e48e0f
+        image: docker.io/prom/node-exporter:v1.1.1@sha256:5982c5e716c32a9ec5032b6b86be054a9abe911e3c79b376a7f011d2a7551add
         name: node-exporter
         ports:
         - name: web
