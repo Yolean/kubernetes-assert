@@ -12,5 +12,6 @@ kubernetes {
     kubeStateMetricsSelector: 'job="kube-state-metrics"',
     nodeExporterSelector: 'job="node-exporter"',
     kubeletSelector: 'job="kubelet"',
+    cpuThrottlingSelector: 'pod!~"metrics-server.*"',
   },
 }
