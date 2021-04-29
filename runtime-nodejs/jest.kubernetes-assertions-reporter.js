@@ -4,6 +4,7 @@ const http = require('http');
 const PORT = process.env.PORT ? parseInt(process.env.PORT) : 9091;
 const RERUN_WAIT = parseInt(process.env.RERUN_WAIT);
 const ASSERT_IS_DEV = process.env.ASSERT_IS_DEV === 'true';
+let ALLOW_RERUNS = true;
 
 const client = require('prom-client');
 const register = client.register;
@@ -59,6 +60,16 @@ class SpecFilesTracker {
       assert_files_seen.inc();
       if (numFailingTests > 0) assertions_failed.inc(numFailingTests);
       console.log('Path reported for the first time:', path);
+        if (fs.existsSync('./env.json')) {
+          var content = fs.readFileSync('./env.json', 'utf8');
+          console.log(content);
+          var obj = JSON.parse(content);
+          console.log(obj.name);
+          if(content==1) {
+            ALLOW_RERUNS=false;
+            console.log(ALLOW_RERUNS);
+          }
+      }
     }
     this._pathsSeen[path].numFailingTests = numFailingTests;
   }
@@ -99,14 +110,17 @@ const tracker = new SpecFilesTracker();
 class Reruns {
 
   constructor({ tracker, intervalMs }) {
-    console.log('Activating reruns with interval (ms)', intervalMs);
+    console.log('Allow reruns:', ALLOW_RERUNS );
+    if (ALLOW_RERUNS) {
+      console.log('Activating reruns with interval (ms)', intervalMs);
+    }
     this._intervalMs = intervalMs;
     this._timeout = null;
   }
 
   onRunComplete() {
     this._timeout !== null && clearTimeout(this._timeout);
-    if (!ASSERT_IS_DEV && RERUN_WAIT) {
+    if (!ASSERT_IS_DEV && RERUN_WAIT && ALLOW_RERUNS) {
       this._timeout = setTimeout(() => {
         tracker.modifyAll();
       }, this._intervalMs);
