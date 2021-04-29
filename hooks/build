@@ -1,7 +1,16 @@
-#!/bin/bash
-set -e
+#!/usr/bin/env bash
+[ -z "$DEBUG" ] || set -x
+set -eo pipefail
 
 [ -z "$IMAGE_NAME" ] && echo "IMAGE_NAME is required" && exit 1;
+
+GIT_STATUS=$(git status --untracked-files=no --porcelain=v2)
+[ ! -z "$SOURCE_COMMIT" ] || export SOURCE_COMMIT=$(git rev-parse --verify HEAD)
+[ -z "$GIT_STATUS" ] || export SOURCE_COMMIT="$SOURCE_COMMIT-dirty"
+[ ! -z "$SOURCE_BRANCH" ] || export SOURCE_BRANCH=$(git branch --show-current)
+
+echo "------ HOOK START - BUILD -------"
+printenv
 
 function imagename {
   buildname=$1
@@ -34,3 +43,5 @@ done
 echo "PUSH list contains: $PUSH"
 [ -z "$NOPUSH" ] || exit 0
 for P in $PUSH; do docker push $P; done
+
+echo "------ HOOK END   - BUILD -------"

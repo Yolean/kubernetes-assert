@@ -103,7 +103,13 @@ docker-compose -f docker-compose.test.yml up --no-build kubernetes-mixin
 
 ## CI test suite
 
-WIP
+Build only:
+
+```
+NOPUSH=true IMAGE_NAME=solsson/kubernetes-assert:latest ./hooks/build
+```
+
+Integration test:
 
 ```
 docker volume rm kubernetes-monitoring_admin 2> /dev/null || true
