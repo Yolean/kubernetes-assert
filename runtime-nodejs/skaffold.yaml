@@ -14,7 +14,7 @@ build:
       dependencies:
         dockerfile:
           path: Dockerfile
-    sync:
+    sync: # This is where we should look if we want to include env vars?
       manual:
       # With skaffold dev this is the runtime's specs, which is why it differs from the COPY directive in the Dockerfile
       - src: 'specs/**'
