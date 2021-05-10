@@ -6,8 +6,7 @@ const ASSERT_IS_DEV = process.env.ASSERT_IS_DEV === 'true';
 
 const client = require('prom-client');
 const register = client.register;
-const rerunTime = process.env.RERUN_TIME || 0;
-let hasRun = false;
+let allow_modification = false;
 
 const assertions_failed = new client.Gauge({
   name: 'assertions_failed',
@@ -53,23 +52,17 @@ class SpecFilesTracker {
   pathSeen(path, { numFailingTests }) {
     if (this._pathsSeen.hasOwnProperty(path)) {
       const delta = numFailingTests - this._pathsSeen[path].numFailingTests;
-
-      console.log(hasRun);
-      if (hasRun) {
+      if(allow_modification) {
         if (delta > 0) assertions_failed.inc(delta);
         if (delta < 0) assertions_failed.dec(-delta);
       }
-
     } else {
       this._pathsSeen[path] = {};
       assert_files_seen.inc();
-
-      if (hasRun) {
-        if (numFailingTests > 0) assertions_failed.inc(numFailingTests);
-      }
-
+      if (numFailingTests > 0) assertions_failed.inc(numFailingTests);
       console.log('Path reported for the first time:', path);
     }
+
     this._pathsSeen[path].numFailingTests = numFailingTests;
   }
 
@@ -79,6 +72,10 @@ class SpecFilesTracker {
       if (err) throw err;
       //console.log('Modified', path);
     });
+  }
+
+  allowMod() {
+    allow_modification = true;
   }
 
   modifyAll() {
@@ -106,24 +103,31 @@ const tracker = new SpecFilesTracker();
  * We rerun all tests, not only failed, because when it comes to infra things go up and down.
  */
 class Reruns {
-  constructor({ tracker, intervalMs }) {
+  constructor({ tracker }) {
     this._rerunTime = 0;
     if (fs.existsSync('./env.json')) {
       this._rerunTime = Number(JSON.parse(fs.readFileSync('./env.json', 'utf8')).RERUN_TIME);
     }
-    if (intervalMs != 0) {
-      console.log('Activating reruns with interval (ms)', intervalMs);
+    if (this._rerunTime != 0) {
+      console.log('Activating reruns with interval (ms)', this._rerunTime * 1000);
     } else {
       console.log('Interval reruns are turned off. Reruns will be run until all tests are OK');
     }
-    this._intervalMs = this._rerunTime * 1000;
+    setTimeout(() => {
+      tracker.allowMod();
+    }, 9000);
+    this._intervalMs = this._rerunTime === 0 ? 10000 : this._rerunTime * 1000;
     this._timeout = null;
   }
 
   onRunComplete() {
     this._timeout !== null && clearTimeout(this._timeout);
 
-    if (!ASSERT_IS_DEV && (this._rerunTime > 0 || assertions_failed.hashMap[''].value > 0)) {
+    if (!ASSERT_IS_DEV && (this._rerunTime > 0)) {
+      this._timeout = setTimeout(() => {
+        tracker.modifyAll();
+      }, this._intervalMs);
+    } else if (assertions_failed.hashMap[''].value > 0) {
       this._timeout = setTimeout(() => {
         tracker.modifyAll();
       }, this._intervalMs);
@@ -131,10 +135,8 @@ class Reruns {
   }
 }
 
-
 const reruns = new Reruns({
-  tracker,
-  intervalMs: 0 * 1000
+  tracker
 });
 
 class MetricsServer {
@@ -215,7 +217,6 @@ class MetricsReporter {
     tests_run_total.inc(results.numTotalTests);
     assertions_failed_total.inc(results.numFailedTests);
 
-    hasRun = true;
     if (!this._globalConfig.watch && !this._globalConfig.watchAll) {
       //console.log('Not a watch run. Exiting');
       server.stop();
