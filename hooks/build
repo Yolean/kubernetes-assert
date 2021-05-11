@@ -26,7 +26,6 @@ docker build -t $IMAGE_NAME .
 CONTEXTS="
 runtime-nodejs
 runtime-typescript
-specs
 "
 
 PUSH=""
