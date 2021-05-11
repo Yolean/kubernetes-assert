@@ -2,6 +2,10 @@
 [ -z "$DEBUG" ] || set -x
 set -eo pipefail
 
+# Settings
+DEFAULT_REGISTRY=builds-registry.ystack.svc.cluster.local
+[ -z "$BUILDS_REGISTRY" ] && BUILDS_REGISTRY=$DEFAULT_REGISTRY
+
 [ -z "$IMAGE_NAME" ] && echo "IMAGE_NAME is required" && exit 1;
 
 GIT_STATUS=$(git status --untracked-files=no --porcelain=v2)
@@ -11,6 +15,13 @@ GIT_STATUS=$(git status --untracked-files=no --porcelain=v2)
 
 echo "------ HOOK START - BUILD -------"
 printenv
+
+PREPEND_REGISTRY=""
+case $IMAGE_NAME in
+  solsson/* ) ;;
+  $BUILDS_REGISTRY* ) PREPEND_REGISTRY="${BUILDS_REGISTRY}/" ;;
+  *) ;;
+esac
 
 function imagename {
   buildname=$1
@@ -26,7 +37,6 @@ docker build -t $IMAGE_NAME .
 CONTEXTS="
 runtime-nodejs
 runtime-typescript
-specs
 "
 
 PUSH=""
@@ -35,8 +45,8 @@ for CONTEXT in $CONTEXTS; do
 
   CONTEXT_IMAGE_NAME=$(imagename $CONTEXT)
 
-  docker build -t $CONTEXT_IMAGE_NAME -t yolean/assert-$CONTEXT -t yolean/assert-$CONTEXT:$SOURCE_COMMIT ./$CONTEXT
-  PUSH="$PUSH $CONTEXT_IMAGE_NAME yolean/assert-$CONTEXT:$SOURCE_COMMIT"
+  docker build -t $CONTEXT_IMAGE_NAME -t yolean/assert-$CONTEXT -t ${PREPEND_REGISTRY}yolean/assert-$CONTEXT:$SOURCE_COMMIT ./$CONTEXT
+  PUSH="$PUSH $CONTEXT_IMAGE_NAME ${PREPEND_REGISTRY}yolean/assert-$CONTEXT:$SOURCE_COMMIT"
 
 done
 

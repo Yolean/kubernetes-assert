@@ -1,4 +1,4 @@
-apiVersion: skaffold/v2beta4
+apiVersion: skaffold/v2beta15
 kind: Config
 metadata:
   name: assert-specs
@@ -7,13 +7,16 @@ build:
     gitCommit:
       variant: CommitSha
   artifacts:
-  - image: builds-registry.ystack.svc.cluster.local:80/yolean/assert-specs
+  - image: builds-registry.ystack.svc.cluster.local/yolean/assert-specs
+    context: ./
+    custom:
+      buildCommand: >-
+        y-build-like-sync
+        builds-registry.ystack.svc.cluster.local/yolean/assert-runtime-nodejs:../../kubernetes-assert/runtime-nodejs
     sync:
       manual:
       - src: '**'
         dest: /usr/src/specs
-    kaniko:
-      reproducible: true
   cluster: {}
 deploy:
   kustomize: {}
