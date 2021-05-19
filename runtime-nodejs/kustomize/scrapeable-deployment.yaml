@@ -12,7 +12,6 @@ spec:
       labels:
         kubernetes-assert: metrics
     spec:
-      serviceAccountName: assert
       containers:
       - name: specs
         # We can't have a tag here because https://kubectl.docs.kubernetes.io/pages/reference/kustomize.html#images won't unset it, and Skaffold required no-tag URLs for build
@@ -38,11 +37,6 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: spec.serviceAccountName
-        - name: ASSERT_IS_DEV
-          valueFrom:
-            fieldRef:
-              # This will be true for run --tail as well but that's also a dev-loop use case
-              fieldPath: metadata.labels['skaffold.dev/tail']
         ports:
         - containerPort: 9091
           name: assert

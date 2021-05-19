@@ -106,12 +106,13 @@ docker-compose -f docker-compose.test.yml up --no-build kubernetes-mixin
 Build only:
 
 ```
-NOPUSH=true IMAGE_NAME=solsson/kubernetes-assert:latest ./hooks/build
+NOPUSH=true IMAGE_NAME=builds-registry.ystack.svc.cluster.local/yolean/assert ./hooks/build
 ```
 
 Integration test:
 
 ```
+NOPUSH=true IMAGE_NAME=solsson/kubernetes-assert:latest ./hooks/build
 docker volume rm kubernetes-monitoring_admin 2> /dev/null || true
 ./test.sh
 ```
