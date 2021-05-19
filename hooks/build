@@ -8,9 +8,11 @@ DEFAULT_REGISTRY=builds-registry.ystack.svc.cluster.local
 
 [ -z "$IMAGE_NAME" ] && echo "IMAGE_NAME is required" && exit 1;
 
-GIT_STATUS=$(git status --untracked-files=no --porcelain=v2)
-[ ! -z "$SOURCE_COMMIT" ] || export SOURCE_COMMIT=$(git rev-parse --verify HEAD)
-[ -z "$GIT_STATUS" ] || export SOURCE_COMMIT="$SOURCE_COMMIT-dirty"
+[ ! -z "$SOURCE_COMMIT" ] || {
+  export SOURCE_COMMIT=$(git rev-parse --verify HEAD)
+  GIT_STATUS=$(git status --untracked-files=no --porcelain=v2)
+  [ -z "$GIT_STATUS" ] || export SOURCE_COMMIT="$SOURCE_COMMIT-dirty"
+}
 [ ! -z "$SOURCE_BRANCH" ] || export SOURCE_BRANCH=$(git branch --show-current)
 
 echo "------ HOOK START - BUILD -------"
