@@ -2,11 +2,11 @@ const fs = require('fs');
 const http = require('http');
 
 const PORT = process.env.PORT ? parseInt(process.env.PORT) : 9091;
-const RERUN_WAIT = parseInt(process.env.RERUN_WAIT);
 const ASSERT_IS_DEV = process.env.ASSERT_IS_DEV === 'true';
 
 const client = require('prom-client');
 const register = client.register;
+let allow_modification = false;
 
 const assertions_failed = new client.Gauge({
   name: 'assertions_failed',
@@ -52,14 +52,17 @@ class SpecFilesTracker {
   pathSeen(path, { numFailingTests }) {
     if (this._pathsSeen.hasOwnProperty(path)) {
       const delta = numFailingTests - this._pathsSeen[path].numFailingTests;
-      if (delta > 0) assertions_failed.inc(delta);
-      if (delta < 0) assertions_failed.dec(-delta);
+      if(allow_modification) {
+        if (delta > 0) assertions_failed.inc(delta);
+        if (delta < 0) assertions_failed.dec(-delta);
+      }
     } else {
       this._pathsSeen[path] = {};
       assert_files_seen.inc();
       if (numFailingTests > 0) assertions_failed.inc(numFailingTests);
       console.log('Path reported for the first time:', path);
     }
+
     this._pathsSeen[path].numFailingTests = numFailingTests;
   }
 
@@ -71,6 +74,10 @@ class SpecFilesTracker {
     });
   }
 
+  allowMod() {
+    allow_modification = true;
+  }
+
   modifyAll() {
     const modify = this.modify.bind(this);
     const paths = Object.keys(this._pathsSeen);
@@ -80,7 +87,6 @@ class SpecFilesTracker {
       modify(path);
     });
   }
-
 }
 
 const tracker = new SpecFilesTracker();
@@ -97,31 +103,43 @@ const tracker = new SpecFilesTracker();
  * We rerun all tests, not only failed, because when it comes to infra things go up and down.
  */
 class Reruns {
-
-  constructor({ tracker, intervalMs }) {
-    console.log('Activating reruns with interval (ms)', intervalMs);
-    this._intervalMs = intervalMs;
+  constructor({ tracker }) {
+    this._rerunTime = 0;
+    if (fs.existsSync('./env.json')) {
+      this._rerunTime = Number(JSON.parse(fs.readFileSync('./env.json', 'utf8')).RERUN_TIME);
+    }
+    if (this._rerunTime != 0) {
+      console.log('Activating reruns with interval (ms)', this._rerunTime * 1000);
+    } else {
+      console.log('Interval reruns are turned off. Reruns will be run until all tests are OK');
+    }
+    setTimeout(() => {
+      tracker.allowMod();
+    }, 9000);
+    this._intervalMs = this._rerunTime === 0 ? 10000 : this._rerunTime * 1000;
     this._timeout = null;
   }
 
   onRunComplete() {
     this._timeout !== null && clearTimeout(this._timeout);
-    if (!ASSERT_IS_DEV && RERUN_WAIT) {
+
+    if (!ASSERT_IS_DEV && (this._rerunTime > 0)) {
+      this._timeout = setTimeout(() => {
+        tracker.modifyAll();
+      }, this._intervalMs);
+    } else if (assertions_failed.hashMap[''].value > 0) {
       this._timeout = setTimeout(() => {
         tracker.modifyAll();
       }, this._intervalMs);
     }
   }
-
 }
 
 const reruns = new Reruns({
-  tracker,
-  intervalMs: RERUN_WAIT * 1000
+  tracker
 });
 
 class MetricsServer {
-
   constructor({ port, getMetrics }) {
     this.port = port;
     this.getMetrics = getMetrics;
@@ -157,7 +175,6 @@ class MetricsServer {
   stop() {
     this.server.close();
   }
-
 }
 
 const server = new MetricsServer({
@@ -167,8 +184,9 @@ const server = new MetricsServer({
 
 server.start();
 
-class MetricsReporter {
 
+
+class MetricsReporter {
   constructor(globalConfig, options) {
     this._globalConfig = globalConfig;
     this._options = options;
@@ -179,7 +197,7 @@ class MetricsReporter {
   onRunStart() {
     //console.log('onRunStart', arguments);
   }
-  
+
   onTestStart() {
     //console.log('onTestStart', arguments);
   }
@@ -187,22 +205,24 @@ class MetricsReporter {
   onRunComplete(contexts, results) {
     //console.log('onRunComplete', contexts, results);
     const { testResults } = results;
+
     for (let i = 0; i < testResults.length; i++) {
       const { testFilePath, numFailingTests } = testResults[i];
       this._tracker.pathSeen(testFilePath, { numFailingTests });
     }
+
     test_suites_run.set(results.numTotalTestSuites);
     test_suites_run_total.inc(results.numTotalTestSuites);
     tests_run.set(results.numTotalTests);
     tests_run_total.inc(results.numTotalTests);
     assertions_failed_total.inc(results.numFailedTests);
+
     if (!this._globalConfig.watch && !this._globalConfig.watchAll) {
       //console.log('Not a watch run. Exiting');
       server.stop();
     }
     reruns.onRunComplete();
   }
-
 }
 
 module.exports = MetricsReporter;
