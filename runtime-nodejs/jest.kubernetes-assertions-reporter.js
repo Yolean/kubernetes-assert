@@ -2,11 +2,11 @@ const fs = require('fs');
 const http = require('http');
 
 const PORT = process.env.PORT ? parseInt(process.env.PORT) : 9091;
-const RERUN_WAIT = parseInt(process.env.RERUN_WAIT);
 const ASSERT_IS_DEV = process.env.ASSERT_IS_DEV === 'true';
 
 const client = require('prom-client');
 const register = client.register;
+let allow_modification = false;
 
 
 const assertions_failed = new client.Gauge({
@@ -55,8 +55,10 @@ class SpecFilesTracker {
   pathSeen(path, { numFailingTests }) {
     if (this._pathsSeen.hasOwnProperty(path)) {
       const delta = numFailingTests - this._pathsSeen[path].numFailingTests;
-      if (delta > 0) assertions_failed.inc(delta);
-      if (delta < 0) assertions_failed.dec(-delta);
+      if(allow_modification) {
+        if (delta > 0) assertions_failed.inc(delta);
+        if (delta < 0) assertions_failed.dec(-delta);
+      }
     } else {
       this._pathsSeen[path] = {};
       this._pathCounter[path] = 0;
@@ -64,6 +66,7 @@ class SpecFilesTracker {
       if (numFailingTests > 0) assertions_failed.inc(numFailingTests);
       console.log('Path reported for the first time:', path);
     }
+
     this._pathsSeen[path].numFailingTests = numFailingTests;
     
     if (this._prevFailTests == this._pathsSeen[path].numFailingTests) {
@@ -90,7 +93,6 @@ class SpecFilesTracker {
 
   allowMod() {
     allow_modification = true;
-    console.log("Allow modifications: ", allow_modification);
   }
 
   modifyAll() {
@@ -102,7 +104,6 @@ class SpecFilesTracker {
       modify(path);
     });
   }
-
 }
 
 const tracker = new SpecFilesTracker();
@@ -120,6 +121,7 @@ const tracker = new SpecFilesTracker();
  */
 class Reruns {
 
+
   timeoutReached() {
     console.log("Stopping reruns, timeout has been reached.");
     console.log("Will not rerun until file modification");
@@ -134,6 +136,7 @@ class Reruns {
     if (fs.existsSync('./env.json')) {
       this._rerunTime = Number(JSON.parse(fs.readFileSync('./env.json', 'utf8')).RERUN_TIME);
       this._timeout = Number(JSON.parse(fs.readFileSync('./env.json', 'utf8')).TIMEOUT);
+
     }
     if (this._rerunTime != 0) {
       console.log('Activating reruns with interval (ms)', this._rerunTime * 1000);
@@ -144,12 +147,12 @@ class Reruns {
       tracker.allowMod();
     }, 9000);
 
+
     if(this._timeout != 0) {
       setTimeout(() => {
         this.timeoutReached();
       }, this._timeout); 
     }
-
 
     this._intervalMs = this._rerunTime === 0 ? 10000 : this._rerunTime * 1000;
     this._timeout = null;
@@ -158,6 +161,7 @@ class Reruns {
   onRunComplete() {
     this._timeout !== null && clearTimeout(this._timeout);
 
+
     if (!ASSERT_IS_DEV && (this._rerunTime > 0) && this._doRerun) {
       console.log("Current reruntime in (s) is: ", this._intervalMs);
       this._timeout = setTimeout(() => {
@@ -165,6 +169,7 @@ class Reruns {
       }, this._intervalMs);
       // Maybe move the else if to the if above.
     } else if (assertions_failed.hashMap[''].value > 0 && this._doRerun) {
+
       this._timeout = setTimeout(() => {
         tracker.modifyAll();
       }, this._intervalMs);
@@ -172,16 +177,13 @@ class Reruns {
     // This is where no reruns should happen?
     console.log("Stopping reruns");
   }
-
 }
 
 const reruns = new Reruns({
-  tracker,
-  intervalMs: RERUN_WAIT * 1000
+  tracker
 });
 
 class MetricsServer {
-
   constructor({ port, getMetrics }) {
     this.port = port;
     this.getMetrics = getMetrics;
@@ -217,7 +219,6 @@ class MetricsServer {
   stop() {
     this.server.close();
   }
-
 }
 
 const server = new MetricsServer({
@@ -227,8 +228,9 @@ const server = new MetricsServer({
 
 server.start();
 
-class MetricsReporter {
 
+
+class MetricsReporter {
   constructor(globalConfig, options) {
     this._globalConfig = globalConfig;
     this._options = options;
@@ -239,7 +241,7 @@ class MetricsReporter {
   onRunStart() {
     //console.log('onRunStart', arguments);
   }
-  
+
   onTestStart() {
     //console.log('onTestStart', arguments);
   }
@@ -247,22 +249,24 @@ class MetricsReporter {
   onRunComplete(contexts, results) {
     //console.log('onRunComplete', contexts, results);
     const { testResults } = results;
+
     for (let i = 0; i < testResults.length; i++) {
       const { testFilePath, numFailingTests } = testResults[i];
       this._tracker.pathSeen(testFilePath, { numFailingTests });
     }
+
     test_suites_run.set(results.numTotalTestSuites);
     test_suites_run_total.inc(results.numTotalTestSuites);
     tests_run.set(results.numTotalTests);
     tests_run_total.inc(results.numTotalTests);
     assertions_failed_total.inc(results.numFailedTests);
+
     if (!this._globalConfig.watch && !this._globalConfig.watchAll) {
       //console.log('Not a watch run. Exiting');
       server.stop();
     }
     reruns.onRunComplete();
   }
-
 }
 
 module.exports = MetricsReporter;
