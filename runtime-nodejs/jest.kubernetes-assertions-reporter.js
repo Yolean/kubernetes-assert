@@ -8,6 +8,7 @@ const client = require('prom-client');
 const register = client.register;
 let allow_modification = false;
 
+
 const assertions_failed = new client.Gauge({
   name: 'assertions_failed',
   help: 'current numFailingTests incrementally aggregated per run per path',
@@ -47,6 +48,8 @@ class SpecFilesTracker {
 
   constructor() {
     this._pathsSeen = {};
+    this._pathCounter = {};
+    this._prevFailTests = 0;
   }
 
   pathSeen(path, { numFailingTests }) {
@@ -58,12 +61,26 @@ class SpecFilesTracker {
       }
     } else {
       this._pathsSeen[path] = {};
+      this._pathCounter[path] = 0;
       assert_files_seen.inc();
       if (numFailingTests > 0) assertions_failed.inc(numFailingTests);
       console.log('Path reported for the first time:', path);
     }
 
     this._pathsSeen[path].numFailingTests = numFailingTests;
+    
+    if (this._prevFailTests == this._pathsSeen[path].numFailingTests) {
+      // Tests for path has not increased
+      this._pathCounter[path]++;
+    }
+    this._prevFailTests = this._pathsSeen[path].numFailingTests
+
+    console.log("Path: " + path + " times, passed: ", this._pathCounter[path]);
+
+    if(this._pathCounter[path] >= 3) {
+      console.log("Test has passed more than 3 times:", path);
+      // Remove test from reruns?
+    }
   }
 
   modify(path) {
@@ -103,10 +120,23 @@ const tracker = new SpecFilesTracker();
  * We rerun all tests, not only failed, because when it comes to infra things go up and down.
  */
 class Reruns {
+
+
+  timeoutReached() {
+    console.log("Stopping reruns, timeout has been reached.");
+    console.log("Will not rerun until file modification");
+    this._doRerun = false;
+    // EXIT IMAGE OF DOCKER ASWELL?
+  }
+
   constructor({ tracker }) {
     this._rerunTime = 0;
+    this._timeout = 0;
+    this._doRerun = true;
     if (fs.existsSync('./env.json')) {
       this._rerunTime = Number(JSON.parse(fs.readFileSync('./env.json', 'utf8')).RERUN_TIME);
+      this._timeout = Number(JSON.parse(fs.readFileSync('./env.json', 'utf8')).TIMEOUT);
+
     }
     if (this._rerunTime != 0) {
       console.log('Activating reruns with interval (ms)', this._rerunTime * 1000);
@@ -116,6 +146,14 @@ class Reruns {
     setTimeout(() => {
       tracker.allowMod();
     }, 9000);
+
+
+    if(this._timeout != 0) {
+      setTimeout(() => {
+        this.timeoutReached();
+      }, this._timeout); 
+    }
+
     this._intervalMs = this._rerunTime === 0 ? 10000 : this._rerunTime * 1000;
     this._timeout = null;
   }
@@ -123,15 +161,21 @@ class Reruns {
   onRunComplete() {
     this._timeout !== null && clearTimeout(this._timeout);
 
-    if (!ASSERT_IS_DEV && (this._rerunTime > 0)) {
+
+    if (!ASSERT_IS_DEV && (this._rerunTime > 0) && this._doRerun) {
+      console.log("Current reruntime in (s) is: ", this._intervalMs);
       this._timeout = setTimeout(() => {
         tracker.modifyAll();
       }, this._intervalMs);
-    } else if (assertions_failed.hashMap[''].value > 0) {
+      // Maybe move the else if to the if above.
+    } else if (assertions_failed.hashMap[''].value > 0 && this._doRerun) {
+
       this._timeout = setTimeout(() => {
         tracker.modifyAll();
       }, this._intervalMs);
     }
+    // This is where no reruns should happen?
+    console.log("Stopping reruns");
   }
 }
 
