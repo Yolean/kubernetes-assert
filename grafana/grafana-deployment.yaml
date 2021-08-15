@@ -17,7 +17,7 @@ spec:
         runAsUser: 472
       containers:
       - name: grafana
-        image: grafana/grafana:7.4.3-ubuntu@sha256:4b9e34618bbc8d393d3075884e5d4a465c3cb5320cf5129b4ed8940334914d52
+        image: docker.io/grafana/grafana
         env:
         # Has to be a kustomization
         # - name: GF_SERVER_ROOT_URL

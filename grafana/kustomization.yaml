@@ -1,9 +1,16 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
+
 namespace: monitoring
+
+images:
+- name: docker.io/grafana/grafana
+  newTag: 8.1.1-ubuntu@sha256:ea8892b22a85e373e5c60d1cffed25d7fe9a4a8fcefc7bcff6e26a6cdac4fc91
+
 resources:
 - grafana-service.yaml
 - grafana-deployment.yaml
+
 configMapGenerator:
 - name: grafana-provisioning-datasources
   files:
