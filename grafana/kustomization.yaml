@@ -5,7 +5,7 @@ namespace: monitoring
 
 images:
 - name: docker.io/grafana/grafana
-  newTag: 8.1.1-ubuntu@sha256:ea8892b22a85e373e5c60d1cffed25d7fe9a4a8fcefc7bcff6e26a6cdac4fc91
+  newTag: 8.2.1-ubuntu@sha256:a06f61307ad9d0b8477353780d4f2eb14113e21e91c47d9294c66a73866f453c
 
 resources:
 - grafana-service.yaml
