@@ -17,7 +17,7 @@ spec:
         runAsUser: 472
       containers:
       - name: grafana
-        image: docker.io/grafana/grafana
+        image: grafana/grafana
         env:
         # Has to be a kustomization
         # - name: GF_SERVER_ROOT_URL
@@ -102,7 +102,7 @@ spec:
           name: kubernetes-mixin-grafana-dashboards
       # renderer should be a separate deployment to allow scale out, but so far we're just testing it
       - name: renderer
-        image: grafana/grafana-image-renderer:2.0.1@sha256:d0c6271cb7f4f7588e1cfda31756e31bd39d5e5bd0e0c7453716e97f16af3126
+        image: grafana/grafana-image-renderer
         env:
         - name: ENABLE_METRICS
           value: "true"
