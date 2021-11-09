@@ -1,4 +1,4 @@
-FROM golang:1.17.2-bullseye@sha256:0ab91ed22604fea9e13ca4f03a545ec7ab48129b0030438dcf8c20f4f3e96fa5
+FROM golang:1.17.3-bullseye@sha256:d765621cbb382494b4f4f0a9266b039232af9a9d1ed2fffed3dd58e476b7f735
 
 COPY --from=grafana/jsonnet-build:7f1cb84@sha256:b904486a187411ee6776b0f1bd098b3fa2f6c456589480952c89533c8e196c2d /usr/bin/jsonnet /usr/local/bin/jsonnet
 
@@ -8,7 +8,7 @@ RUN pwd
 WORKDIR /go/kubernetes-mixin
 COPY . .
 RUN jb init
-RUN jb install github.com/kubernetes-monitoring/kubernetes-mixin@release-0.8
+RUN jb install github.com/kubernetes-monitoring/kubernetes-mixin@release-0.9
 RUN jsonnet -J vendor -S -e 'std.manifestYamlDoc((import "mixin.libsonnet").prometheusAlerts)' > prometheus_alerts.yaml
 RUN jsonnet -J vendor -S -e 'std.manifestYamlDoc((import "mixin.libsonnet").prometheusRules)' > prometheus_rules.yaml
 RUN mkdir dashboards_out && jsonnet -J vendor -m dashboards_out -e '(import "mixin.libsonnet").grafanaDashboards'
