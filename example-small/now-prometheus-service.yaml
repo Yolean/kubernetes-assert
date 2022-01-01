@@ -9,5 +9,5 @@ spec:
     protocol: TCP
     targetPort: web
   selector:
-    app: prometheus
+    app.kubernetes.io/name: prometheus
     prometheus: now
