@@ -5,10 +5,13 @@ set -e
 # expecting an existing clone of https://github.com/Yolean/kubernetes-mixin-managed
 MIXIN_CLONE=../kubernetes-mixin-managed
 
+grep kubelet $MIXIN_CLONE/mixin.libsonnet || mv $MIXIN_CLONE/mixin.libsonnet $MIXIN_CLONE/upstream-mixin.libsonnet
+cp kubernetes-mixin/mixin.libsonnet $MIXIN_CLONE/
+
 (
   cd $MIXIN_CLONE;
   pwd; git remote -v; git branch; git rev-parse HEAD;
-  curl https://gist.github.com/solsson/449f3ceba74859df5b6ead8f16b11dfa/raw/c9f2e5609a52376731da997e81ff185ed9b71869/build-kubernetes-mixin.sh | bash -;
+  curl -L https://gist.githubusercontent.com/solsson/449f3ceba74859df5b6ead8f16b11dfa/raw/2c976dde5557df6697ce241ef13e165e922ee81f/build-kubernetes-mixin.sh | DEBUG=$DEBUG bash -;
 )
 
 jsontoyaml=~/go/bin/gojsontoyaml
