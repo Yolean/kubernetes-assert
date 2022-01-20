@@ -97,8 +97,7 @@ A real stack might start from example-small and then:
 This repo needs to have some generated content, where upstream kustomize bases could not be found
 
 ```
-docker-compose -f docker-compose.test.yml build --no-cache kubernetes-mixin
-docker-compose -f docker-compose.test.yml up --no-build kubernetes-mixin
+./kubernetes-mixin-update.sh
 ```
 
 ## CI test suite
