@@ -21,5 +21,4 @@ configMapGenerator:
   - pod-total.json=pod-total.json
   # - proxy.json=proxy.json
   # - scheduler.json=scheduler.json
-  - statefulset.json=statefulset.json
   - workload-total.json=workload-total.json
