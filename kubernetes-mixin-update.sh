@@ -36,3 +36,8 @@ cat $MIXIN_CLONE/prometheus_alerts.yaml | $jsontoyaml | sed 's|^|  |' >> ./kuber
 
 rm kubernetes-mixin-dashboards/*
 cp $MIXIN_CLONE/dashboards_out/* kubernetes-mixin-dashboards/
+
+echo "Tests, will exit non-zero on failed grep:"
+grep -r kubelet_volume_stats_available_bytes kubernetes-mixin/
+
+echo "Done."
