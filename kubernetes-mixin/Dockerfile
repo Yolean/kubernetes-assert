@@ -1,4 +1,4 @@
-FROM golang:1.17.5-bullseye
+FROM golang:1.17.8-bullseye
 
 COPY --from=grafana/jsonnet-build:7f1cb84@sha256:b904486a187411ee6776b0f1bd098b3fa2f6c456589480952c89533c8e196c2d /usr/bin/jsonnet /usr/local/bin/jsonnet
 
