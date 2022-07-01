@@ -6,10 +6,10 @@ namespace: monitoring
 images:
 - name: grafana/grafana
   newName: docker.io/grafana/grafana
-  newTag: 8.3.4-ubuntu
+  newTag: 8.5.1-ubuntu
 - name: grafana/grafana-image-renderer
   newName: docker.io/grafana/grafana-image-renderer
-  newTag: 3.3.0
+  newTag: 3.4.2
 
 resources:
 - grafana-service.yaml
