@@ -14202,6 +14202,8 @@
           "properties": {
             "groups": {
               "description": "Content of Prometheus rule file",
+              "x-kubernetes-patch-merge-key": "name",
+              "x-kubernetes-patch-strategy": "merge",
               "items": {
                 "description": "RuleGroup is a list of sequentially evaluated recording and alerting rules. Note: PartialResponseStrategy is only used by ThanosRuler and will be ignored by Prometheus instances.  Valid values for this field are 'warn' or 'abort'.  More info: https://github.com/thanos-io/thanos/blob/main/docs/components/rule.md#partial-response",
                 "properties": {
@@ -14215,6 +14217,8 @@
                     "type": "string"
                   },
                   "rules": {
+                    "x-kubernetes-patch-merge-key": "alert",
+                    "x-kubernetes-patch-strategy": "merge",
                     "items": {
                       "description": "Rule describes an alerting or recording rule See Prometheus documentation: [alerting](https://www.prometheus.io/docs/prometheus/latest/configuration/alerting_rules/) or [recording](https://www.prometheus.io/docs/prometheus/latest/configuration/recording_rules/#recording-rules) rule",
                       "properties": {
