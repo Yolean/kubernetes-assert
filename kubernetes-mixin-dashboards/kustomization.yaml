@@ -6,7 +6,7 @@ generatorOptions:
 configMapGenerator:
 - name: kubernetes-mixin-grafana-dashboards
   files:
-  - apiserver.json=apiserver.json
+  # - apiserver.json=apiserver.json
   - cluster-total.json=cluster-total.json
   - k8s-resources-cluster.json=k8s-resources-cluster.json
   - k8s-resources-namespace.json=k8s-resources-namespace.json
@@ -14,12 +14,11 @@ configMapGenerator:
   - k8s-resources-pod.json=k8s-resources-pod.json
   - k8s-resources-workload.json=k8s-resources-workload.json
   - k8s-resources-workloads-namespace.json=k8s-resources-workloads-namespace.json
-  - kubelet.json=kubelet.json
+  # - kubelet.json=kubelet.json
   - namespace-by-pod.json=namespace-by-pod.json
   - namespace-by-workload.json=namespace-by-workload.json
   - persistentvolumesusage.json=persistentvolumesusage.json
   - pod-total.json=pod-total.json
-  - proxy.json=proxy.json
-  - scheduler.json=scheduler.json
-  - statefulset.json=statefulset.json
+  # - proxy.json=proxy.json
+  # - scheduler.json=scheduler.json
   - workload-total.json=workload-total.json
