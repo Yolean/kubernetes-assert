@@ -1,4 +1,4 @@
-local kubernetes = import "kubernetes-mixin/mixin.libsonnet";
+local kubernetes = import "upstream-mixin.libsonnet";
 
 // TODO when we want to exclude/ignore stuff this could help: https://github.com/nabadger/monitoring-mixins
 

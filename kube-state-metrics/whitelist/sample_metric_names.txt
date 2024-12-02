@@ -1,0 +1,205 @@
+   2 kube_certificatesigningrequest_annotations
+   2 kube_certificatesigningrequest_cert_length
+   4 kube_certificatesigningrequest_condition
+   2 kube_certificatesigningrequest_created
+   2 kube_certificatesigningrequest_labels
+ 341 kube_configmap_annotations
+ 341 kube_configmap_created
+ 341 kube_configmap_info
+ 341 kube_configmap_labels
+ 341 kube_configmap_metadata_resource_version
+  77 kube_cronjob_annotations
+  77 kube_cronjob_created
+  77 kube_cronjob_info
+  77 kube_cronjob_labels
+  77 kube_cronjob_metadata_resource_version
+  38 kube_cronjob_next_schedule_time
+  77 kube_cronjob_spec_failed_job_history_limit
+  77 kube_cronjob_spec_successful_job_history_limit
+  77 kube_cronjob_spec_suspend
+  77 kube_cronjob_status_active
+  43 kube_cronjob_status_last_schedule_time
+   9 kube_daemonset_annotations
+   9 kube_daemonset_created
+   9 kube_daemonset_labels
+   9 kube_daemonset_metadata_generation
+   9 kube_daemonset_status_current_number_scheduled
+   9 kube_daemonset_status_desired_number_scheduled
+   9 kube_daemonset_status_number_available
+   9 kube_daemonset_status_number_misscheduled
+   9 kube_daemonset_status_number_ready
+   9 kube_daemonset_status_number_unavailable
+   9 kube_daemonset_status_observed_generation
+   9 kube_daemonset_status_updated_number_scheduled
+ 701 kube_deployment_annotations
+ 701 kube_deployment_created
+ 701 kube_deployment_labels
+ 701 kube_deployment_metadata_generation
+ 701 kube_deployment_spec_paused
+ 701 kube_deployment_spec_replicas
+ 676 kube_deployment_spec_strategy_rollingupdate_max_surge
+ 676 kube_deployment_spec_strategy_rollingupdate_max_unavailable
+4206 kube_deployment_status_condition
+ 701 kube_deployment_status_observed_generation
+ 701 kube_deployment_status_replicas
+ 701 kube_deployment_status_replicas_available
+ 701 kube_deployment_status_replicas_ready
+ 701 kube_deployment_status_replicas_unavailable
+ 701 kube_deployment_status_replicas_updated
+ 930 kube_endpoint_address_available
+ 930 kube_endpoint_address_not_ready
+ 930 kube_endpoint_annotations
+ 930 kube_endpoint_created
+ 930 kube_endpoint_info
+ 930 kube_endpoint_labels
+ 650 kube_endpoint_ports
+   7 kube_horizontalpodautoscaler_annotations
+   7 kube_horizontalpodautoscaler_info
+   7 kube_horizontalpodautoscaler_labels
+   7 kube_horizontalpodautoscaler_metadata_generation
+   7 kube_horizontalpodautoscaler_spec_max_replicas
+   7 kube_horizontalpodautoscaler_spec_min_replicas
+   7 kube_horizontalpodautoscaler_spec_target_metric
+  63 kube_horizontalpodautoscaler_status_condition
+   7 kube_horizontalpodautoscaler_status_current_replicas
+   7 kube_horizontalpodautoscaler_status_desired_replicas
+ 259 kube_job_annotations
+ 708 kube_job_complete
+ 259 kube_job_created
+  60 kube_job_failed
+ 259 kube_job_info
+ 259 kube_job_labels
+ 259 kube_job_owner
+   3 kube_job_spec_active_deadline_seconds
+ 259 kube_job_spec_completions
+ 259 kube_job_spec_parallelism
+ 259 kube_job_status_active
+ 236 kube_job_status_completion_time
+ 296 kube_job_status_failed
+ 259 kube_job_status_start_time
+ 259 kube_job_status_succeeded
+  29 kube_lease_owner
+  29 kube_lease_renew_time
+   3 kube_limitrange
+   2 kube_limitrange_created
+   7 kube_mutatingwebhookconfiguration_created
+   7 kube_mutatingwebhookconfiguration_info
+   7 kube_mutatingwebhookconfiguration_metadata_resource_version
+  57 kube_namespace_annotations
+  57 kube_namespace_created
+  57 kube_namespace_labels
+ 114 kube_namespace_status_phase
+  24 kube_node_annotations
+  24 kube_node_created
+  24 kube_node_info
+  24 kube_node_labels
+   1 kube_node_spec_taint
+  24 kube_node_spec_unschedulable
+ 168 kube_node_status_allocatable
+ 168 kube_node_status_capacity
+ 843 kube_node_status_condition
+  64 kube_persistentvolume_annotations
+  64 kube_persistentvolume_capacity_bytes
+  64 kube_persistentvolume_claim_ref
+  64 kube_persistentvolume_info
+  64 kube_persistentvolume_labels
+ 320 kube_persistentvolume_status_phase
+  68 kube_persistentvolumeclaim_access_mode
+  68 kube_persistentvolumeclaim_annotations
+  68 kube_persistentvolumeclaim_info
+  68 kube_persistentvolumeclaim_labels
+  68 kube_persistentvolumeclaim_resource_requests_storage_bytes
+ 204 kube_persistentvolumeclaim_status_phase
+1154 kube_pod_annotations
+  95 kube_pod_completion_time
+1726 kube_pod_container_info
+1848 kube_pod_container_resource_limits
+2062 kube_pod_container_resource_requests
+1726 kube_pod_container_state_started
+  73 kube_pod_container_status_last_terminated_reason
+1726 kube_pod_container_status_ready
+1726 kube_pod_container_status_restarts_total
+1726 kube_pod_container_status_running
+1726 kube_pod_container_status_terminated
+ 107 kube_pod_container_status_terminated_reason
+1726 kube_pod_container_status_waiting
+1154 kube_pod_created
+1154 kube_pod_info
+ 207 kube_pod_init_container_info
+  10 kube_pod_init_container_resource_limits
+  10 kube_pod_init_container_resource_requests
+ 207 kube_pod_init_container_status_ready
+ 207 kube_pod_init_container_status_restarts_total
+ 207 kube_pod_init_container_status_running
+ 207 kube_pod_init_container_status_terminated
+ 207 kube_pod_init_container_status_terminated_reason
+ 207 kube_pod_init_container_status_waiting
+1154 kube_pod_labels
+1154 kube_pod_owner
+1154 kube_pod_restart_policy
+  41 kube_pod_spec_volumes_persistentvolumeclaims_info
+  41 kube_pod_spec_volumes_persistentvolumeclaims_readonly
+1154 kube_pod_start_time
+5770 kube_pod_status_phase
+3255 kube_pod_status_ready
+5770 kube_pod_status_reason
+3255 kube_pod_status_scheduled
+1085 kube_pod_status_scheduled_time
+   6 kube_poddisruptionbudget_annotations
+   6 kube_poddisruptionbudget_created
+   6 kube_poddisruptionbudget_labels
+   6 kube_poddisruptionbudget_status_current_healthy
+   6 kube_poddisruptionbudget_status_desired_healthy
+   6 kube_poddisruptionbudget_status_expected_pods
+   6 kube_poddisruptionbudget_status_observed_generation
+   6 kube_poddisruptionbudget_status_pod_disruptions_allowed
+3704 kube_replicaset_annotations
+3704 kube_replicaset_created
+3704 kube_replicaset_labels
+3704 kube_replicaset_metadata_generation
+3704 kube_replicaset_owner
+3704 kube_replicaset_spec_replicas
+3704 kube_replicaset_status_fully_labeled_replicas
+3704 kube_replicaset_status_observed_generation
+3704 kube_replicaset_status_ready_replicas
+3704 kube_replicaset_status_replicas
+ 572 kube_resourcequota
+  58 kube_resourcequota_created
+ 676 kube_secret_annotations
+ 676 kube_secret_created
+ 676 kube_secret_info
+ 676 kube_secret_labels
+ 676 kube_secret_metadata_resource_version
+ 676 kube_secret_type
+ 962 kube_service_annotations
+ 962 kube_service_created
+ 962 kube_service_info
+ 962 kube_service_labels
+ 962 kube_service_spec_type
+   1 kube_service_status_load_balancer_ingress
+  28 kube_statefulset_annotations
+  28 kube_statefulset_created
+  28 kube_statefulset_labels
+  28 kube_statefulset_metadata_generation
+  28 kube_statefulset_replicas
+  28 kube_statefulset_status_current_revision
+  28 kube_statefulset_status_observed_generation
+  28 kube_statefulset_status_replicas
+  28 kube_statefulset_status_replicas_available
+  28 kube_statefulset_status_replicas_current
+  28 kube_statefulset_status_replicas_ready
+  28 kube_statefulset_status_replicas_updated
+  28 kube_statefulset_status_update_revision
+  13 kube_storageclass_annotations
+  13 kube_storageclass_created
+  13 kube_storageclass_info
+  13 kube_storageclass_labels
+  10 kube_validatingwebhookconfiguration_created
+  10 kube_validatingwebhookconfiguration_info
+  10 kube_validatingwebhookconfiguration_metadata_resource_version
+   4 kube_volumeattachment_created
+   4 kube_volumeattachment_info
+   4 kube_volumeattachment_labels
+   4 kube_volumeattachment_spec_source_persistentvolume
+   4 kube_volumeattachment_status_attached
+   4 kube_volumeattachment_status_attachment_metadata
